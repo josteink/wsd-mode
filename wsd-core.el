@@ -37,8 +37,6 @@
                  "&message=" encoded
                  apikey)))
 
-(setf wsd-debug-json '())
-
 (defun wsd-send (message)
   (let* ((url-request-method        "POST")
          (url-request-extra-headers '(("Content-Type" . "application/x-www-form-urlencoded")))
@@ -54,7 +52,6 @@
       ;; parse and return json at point
 
       (let* ((json (json-read)))
-	(setf wsd-debug-json json)
 	(kill-buffer wsd-response)
 	json))))
 
