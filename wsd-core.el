@@ -14,7 +14,6 @@
 ;; implementation based on documentation as found here:
 ;; http://www.websequencediagrams.com/embedding.html
 
-(require 'cl)
 (require 'url)
 (require 'json)
 
@@ -22,7 +21,7 @@
 
 (defun wsd-get-apikey-section ()
   (if wsd-api-key
-      (concatenate 'string "&apikey=" wsd-api-key)
+      (concat "&apikey=" wsd-api-key)
     ""))
 
 (defun wsd-encode (message)
@@ -35,12 +34,11 @@
 (defun wsd-get-request-data (message)
   (let* ((encoded (wsd-encode message))
          (apikey  (wsd-get-apikey-section)))
-    (concatenate 'string
-                 "apiVersion=1"
-                 "&format=png" wsd-format
-                 "&style=" wsd-style
-                 "&message=" encoded
-                 apikey)))
+    (concat "apiVersion=1"
+            "&format=png" wsd-format
+            "&style=" wsd-style
+            "&message=" encoded
+            apikey)))
 
 (defun wsd-send (message)
   (let* ((url-request-method        "POST")
@@ -61,20 +59,19 @@
         json))))
 
 (defun wsd-get-image-url (json)
-  (let* ((url (concatenate 'string
-                           wsd-base-url
-                           (cdr (assoc 'img json)))))
+  (let* ((url (concat wsd-base-url
+                      (cdr (assoc 'img json)))))
     url))
 
 (defun wsd-get-image-extension ()
-  (concatenate 'string "." wsd-format))
+  (concat "." wsd-format))
 
 (defun wsd-get-temp-filename ()
   (make-temp-file "wsd-" nil (wsd-get-image-extension)))
 
 (defun wsd-get-image-filename (name)
   (if name
-      (concatenate 'string (file-name-sans-extension name) (wsd-get-image-extension))
+      (concat (file-name-sans-extension name) (wsd-get-image-extension))
     (wsd-get-temp-filename)))
 
 (defun wsd-process ()
@@ -82,11 +79,10 @@
   (let* ((file-name (wsd-get-image-filename (buffer-file-name))))
     (save-excursion
       (let* ((message (buffer-substring-no-properties (point-min) (point-max)))
-	     (json    (wsd-send message))
-	     (url     (wsd-get-image-url json)))
-	(url-copy-file url file-name t)
-	(browse-url file-name)))))
+             (json    (wsd-send message))
+             (url     (wsd-get-image-url json)))
+        (url-copy-file url file-name t)
+        (browse-url file-name)))))
 
 
 (provide 'wsd-core)
-

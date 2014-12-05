@@ -3,9 +3,14 @@
 
 ;; test-helpers
 
-(defun ends-with-p (source haystack)
-  (string-suffix-p)
-  )
+(when (not (fboundp 'string-suffix-p))
+  (defun string-suffix-p (str1 str2 &optional ignore-case)
+    (let ((begin2 (- (length str2) (length str1)))
+	  (end2 (length str2)))
+      (when (< begin2 0) (setq begin2 0))
+      (eq t (compare-strings str1 nil nil
+			     str2 begin2 end2
+			     ignore-case)))))
 
 (setq file-names '(nil "lalalala" "test.txt" "test.wsd" "test.a.wsd"))
 
