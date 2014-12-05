@@ -26,8 +26,8 @@
 
 (defun wsd-encode (message)
   (let* ((encode1 (replace-regexp-in-string (regexp-quote "+")
-					    (regexp-quote "%2B")
-					    message))
+                                            (regexp-quote "%2B")
+                                            message))
          (encode2 (url-encode-url encode1)))
     encode2))
 
@@ -65,13 +65,26 @@
                            (cdr (assoc 'img json)))))
     url))
 
+(defun wsd-get-image-extension ()
+  (concatenate 'string "." wsd-format))
+
+(defun wsd-get-temp-filename ()
+  (make-temp-file "wsd-" nil (wsd-get-image-extension)))
+
+(defun wsd-get-image-filename (name)
+  (if name
+      (concatenate 'string (file-name-sans-extension name) (wsd-get-image-extension))
+    (wsd-get-temp-filename)))
+
 (defun wsd-process ()
   (interactive)
-  (save-excursion
-    (let* ((message (buffer-substring-no-properties (point-min) (point-max)))
-           (json    (wsd-send message))
-           (url     (wsd-get-image-url json)))
-      (browse-url url))))
+  (let* ((file-name (wsd-get-image-filename (buffer-file-name))))
+    (save-excursion
+      (let* ((message (buffer-substring-no-properties (point-min) (point-max)))
+	     (json    (wsd-send message))
+	     (url     (wsd-get-image-url json)))
+	(url-copy-file url file-name t)
+	(browse-url file-name)))))
 
 
 (provide 'wsd-core)
