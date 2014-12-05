@@ -94,7 +94,8 @@
 
 (defun wsd-process ()
   (interactive)
-  (let* ((buffer-name (buffer-file-name))
+  (let* ((orig-buffer (buffer-name))
+	 (buffer-name (buffer-file-name))
          (file-name   (wsd-get-image-filename buffer-name)))
     (save-excursion
       (let* ((message (buffer-substring-no-properties (point-min) (point-max)))
@@ -105,7 +106,7 @@
     (if (image-type-available-p 'png)
         (let* ((image-buffer-name (wsd-get-image-buffer-name buffer-name file-name)))
 	  (wsd-display-image-inline image-buffer-name file-name)
-	  (switch-to-buffer buffer-name))
+	  (switch-to-buffer orig-buffer))
       (browse-url file-name))))
 
 
