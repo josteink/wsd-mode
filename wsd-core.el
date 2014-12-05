@@ -24,42 +24,10 @@
       (concatenate 'string "&apikey=" wsd-api-key)
     ""))
 
-(defun wsd-list-intersperse (w-lst w-item)
-  "Intersperse sequence W-LST W-ITEM.\n
-:EXAMPLE\n\n\(mon-list-intersperse (number-sequence 0 6) '^\)\n
-\(mon-mapcar #'\(lambda \(x &rest y\)
-                \(mon-list-intersperse `\(,x ,@y\) '_\)\)
-            '\(a s d f g\) '\(g f d s a\)
-            '\(q w e r t\) '\(t r e w q\)\)\n
-:SEE-ALSO `mon-transpose', `mon-map-append', `mon-mapcan', `mon-mapcon'.\n►►►"
-  (let ((mil-list* ;; this is cl.el's `list*'
-         #'(lambda (mil-L-1-arg &rest mil-L-1-rest)
-             (cond ((not mil-L-1-rest) mil-L-1-arg)
-                   ((not (cdr mil-L-1-rest))
-                    ;; (cons mil-L-1-arg (car mil-L-1-rest))
-                    (nconc mil-L-1-arg (car mil-L-1-rest)))
-                   (t (let* ((mil-L-1-len (length mil-L-1-rest))
-                             (mil-L-1-cpy (copy-sequence mil-L-1-rest))
-                             (mil-L-1-tl  (nthcdr (- mil-L-1-len 2) mil-L-1-cpy)))
-                        (setcdr mil-L-1-tl (cadr mil-L-1-tl))
-                        (cons mil-L-1-arg mil-L-1-cpy)))))))
-    (if (null (cdr w-lst))
-        w-lst
-      ;; If we could use cl.el's `list*', then following would work:
-      ;; :WAS (list* (car w-lst) w-item
-      ;;          (mon-intersperse-list (cdr w-lst) w-item))
-      (apply mil-list*
-             (car w-lst)
-             (list w-item (wsd-list-intersperse (cdr w-lst) w-item))))))
-
-(defun wsd-string-replace (source match replacement)
-  (let* ((parts  (split-string source match))
-         (parts2 (wsd-list-intersperse parts replacement))
-         (result (apply 'concatenate 'string parts2)))
-    result))
-
 (defun wsd-encode (message)
-  (let* ((encode1 (wsd-string-replace message "+" "%2B"))
+  (let* ((encode1 (replace-regexp-in-string (regexp-quote "+")
+					    (regexp-quote "%2B")
+					    message))
          (encode2 (url-encode-url encode1)))
     encode2))
 
