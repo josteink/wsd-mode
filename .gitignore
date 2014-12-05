@@ -40,6 +40,5 @@ tramp
 *.elc
 
 # Packaging
-.cask
-
+.tmp
 

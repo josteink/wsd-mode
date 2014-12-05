@@ -1,4 +1,6 @@
 
+;; Version : 0.0.1
+
 (require 'wsd-core)
 
 ;; notes about derived mode here: http://www.emacswiki.org/emacs/DerivedMode
@@ -24,3 +26,6 @@
   (font-lock-add-keywords nil wsd-keyword-list)
 
   (local-set-key (kbd "C-c C-c") 'wsd-process))
+
+
+(provide 'wsd-mode)
