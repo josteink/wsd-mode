@@ -14,6 +14,7 @@
 ;; implementation based on documentation as found here:
 ;; http://www.websequencediagrams.com/embedding.html
 
+(require 'cl)
 (require 'url)
 (require 'json)
 
@@ -88,3 +89,4 @@
 
 
 (provide 'wsd-core)
+
