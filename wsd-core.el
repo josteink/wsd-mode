@@ -92,6 +92,9 @@
     (insert-image (create-image file-name))
     (read-only-mode t)))
 
+;; for debugging
+(setq wsd-json nil)
+
 (defun wsd-process ()
   (interactive)
   (let* ((orig-buffer (buffer-name))
@@ -101,6 +104,7 @@
       (let* ((message (buffer-substring-no-properties (point-min) (point-max)))
              (json    (wsd-send message))
              (url     (wsd-get-image-url json)))
+	(setq wsd-json json)
         (url-copy-file url file-name t)))
     ;;(if (graphics))
     (if (image-type-available-p 'png)

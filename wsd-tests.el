@@ -26,7 +26,10 @@
       (should
        (string-suffix-p wsd-format image-name)))))
 
-(setq wsd-test-json '((boxes . [((rect . [48.0156 272 132 18]) (line . 13)) ((rect . [48.0156 244 132 18]) (line . 12)) ((rect . [59.0156 198 85 36]) (line . 10)) ((rect . [197.516 152 311 36]) (line . 8)) ((rect . [48.0156 124 132 18]) (line . 6)) ((rect . [48.0156 96 132 18]) (line . 5)) ((rect . [10 10 509.516 22]) (line . 0)) ((rect . [134.797 300 101.438 44]) (line . 3)) ((rect . [134.797 42 101.438 44]) (line . 3)) ((rect . [13.5781 300 66.875 44]) (line . 2)) ((rect . [13.5781 42 66.875 44]) (line . 2))]) (actualWidth . 529.516) (naturalWidth . 529.516) (errors . []) (img . "?png=mscb9q07p")))
+(setq wsd-test-json-img '((actualWidth . 529.516) (naturalWidth . 529.516) (errors . []) (img . "?png=mscb9q07p")))
+
+(setq wsd-test-json-error '((actualWidth . 531.016) (naturalWidth . 531.016) (errors . ["Line 20: Deactivate: User was not activated."]) (img . "?png=mscpFx2np"))
+)
 
 (ert-deftest image-urls-are-detected ()
   ;; todo: craft JSON, parse JSON, verify URL
