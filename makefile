@@ -1,5 +1,5 @@
-VERSION=$(shell grep ";; Version " csharp-mode.el | cut -d ":" -f2 | cut -c2-)
 PACKAGE_SHORTNAME=wsd-mode
+VERSION=$(shell grep ";; Version " $(PACKAGE_SHORTNAME).el | cut -d ":" -f2 | cut -c2-)
 PACKAGE_NAME:=$(PACKAGE_SHORTNAME)-$(VERSION)
 PACKAGE_DIR:=./.tmp/$(PACKAGE_NAME)
 #PACKAGE_DIR:=/tmp/$(PACKAGE_NAME)
