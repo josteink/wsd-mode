@@ -1,0 +1,19 @@
+
+* wsd-mode
+
+wsd-mode is a Emacs major-mode for 
+[[http://www.websequencediagrams.com][www.websequencediagrams.com]].
+
+** Goals / Features
+
+The major-mode aims to provide the following features:
+
+- auto-generating diagrams based on source.
+- proper syntax highlighting for all WSD syntax.
+- indentation based on nested constructs and alternative paths.
+- in buffer error-highlighting.
+
+** Status
+
+was-mode is currently a work in progress. Once it reaches stable,
+package will be published on MELPA.
