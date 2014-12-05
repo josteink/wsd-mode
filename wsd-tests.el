@@ -17,13 +17,13 @@
 (ert-deftest local-filename-is-never-nil ()
   (dolist (file-name file-names)
     (let* ((image-name (wsd-get-image-filename file-name)))
-      (assert
+      (should
        (not (equal nil image-name))))))
 
 (ert-deftest local-filename-always-contains-extension ()
   (dolist (file-name file-names)
     (let* ((image-name (wsd-get-image-filename file-name)))
-      (assert
+      (should
        (string-suffix-p wsd-format image-name)))))
 
 ;;(ert-run-tests-interactively t)
