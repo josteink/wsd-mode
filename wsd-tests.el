@@ -26,5 +26,14 @@
       (should
        (string-suffix-p wsd-format image-name)))))
 
+(ert-deftest image-urls-are-detected ()
+  ;; todo: craft JSON, parse JSON, verify URL
+  )
+
+(ert-deftest errors-are-detected ()
+  ;; todo: craft JSON, parse JSON, verify errors
+  )
+
+
 ;;(ert-run-tests-interactively t)
 
