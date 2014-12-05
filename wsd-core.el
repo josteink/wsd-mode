@@ -74,15 +74,37 @@
       (concat (file-name-sans-extension name) (wsd-get-image-extension))
     (wsd-get-temp-filename)))
 
+(defun wsd-get-image-buffer-name (buffer-name file-name)
+  (if (not (buffer-name))
+      (concat "wsd-temp-buffer." wsd-format)
+    file-name))
+
+(defun wsd-clear-buffer ()
+  (delete-region (point-min) (point-max)))
+
+(defun wsd-display-image-inline (buffer-name file-name)
+  (let* ((buffer-name (wsd-get-image-buffer-name buffer-name file-name)))
+    (if (get-buffer buffer-name)
+	(progn
+	  (switch-to-buffer buffer-name)
+	  (revert-buffer nil t t))
+      (progn
+	(find-file file-name)
+	(rename-buffer buffer-name)))))
+
 (defun wsd-process ()
   (interactive)
-  (let* ((file-name (wsd-get-image-filename (buffer-file-name))))
+  (let* ((buffer-name (buffer-file-name))
+	 (file-name   (wsd-get-image-filename buffer-name)))
     (save-excursion
       (let* ((message (buffer-substring-no-properties (point-min) (point-max)))
              (json    (wsd-send message))
              (url     (wsd-get-image-url json)))
-        (url-copy-file url file-name t)
-        (browse-url file-name)))))
+        (url-copy-file url file-name t)))
+    (if (image-type-available-p 'png)
+	(wsd-display-image-inline buffer-name file-name)
+      (browse-url file-name))))
 
 
 (provide 'wsd-core)
+
