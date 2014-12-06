@@ -6,7 +6,7 @@
 ;; Version    : 0.0.1
 ;; Keywords   : wsd diagrams design process modelling
 ;; X-URL      : https://github.com/josteink/wsd-mode
-;; 
+;;
 
 (require 'wsd-core)
 
@@ -26,12 +26,14 @@
   (wsd-add-keywords 'font-lock-keyword-face
                     '("title"
                       "participant" " as "
-
+                      "deactivate" "activate"
                       "alt" "else" "end"
                       "note" "over" "right" "left" "of"))
   (wsd-add-keywords 'font-lock-comment-face
-		    '("-->-" "-->" "->+" "->-" "->" ": "))
+                    '("-->-" "-->" "->+" "->-" "->" ": "))
 
-  (local-set-key (kbd "C-c C-c") 'wsd-process))
+  (local-set-key (kbd "C-c C-c") 'wsd-show-diagram-inline)
+  (local-set-key (kbd "C-c C-e") 'wsd-show-diagram-online)
+  (local-set-key (kbd "C-c C-k") 'wsd-strip-errors))
 
 (provide 'wsd-mode)

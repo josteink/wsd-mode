@@ -40,7 +40,7 @@
             "&message=" encoded
             apikey)))
 
-(defun wsd-send (message)
+(defun wsd-get-json (message)
   (let* ((url-request-method        "POST")
          (url-request-extra-headers '(("Content-Type" . "application/x-www-form-urlencoded")))
          (url-request-data          (wsd-get-request-data message))
@@ -92,26 +92,42 @@
     (insert-image (create-image file-name))
     (read-only-mode t)))
 
+(defun wsd-image-format-supported-p ()
+  (image-type-available-p (intern wsd-format)))
+
 ;; for debugging
 (setq wsd-json nil)
 
-(defun wsd-process ()
+(defun wsd-show-diagram-inline ()
+  "Attempts to show the diagram provided by the current buffer inside an Emacs-buffer.
+   If emacs lacks format for the given graphics-format it will be delegated to the
+   operating-system to open the local copy."
   (interactive)
   (let* ((orig-buffer (buffer-name))
-	 (buffer-name (buffer-file-name))
+         (buffer-name (buffer-file-name))
          (file-name   (wsd-get-image-filename buffer-name)))
-    (save-excursion
-      (let* ((message (buffer-substring-no-properties (point-min) (point-max)))
-             (json    (wsd-send message))
-             (url     (wsd-get-image-url json)))
+    (let* ((message (buffer-substring-no-properties (point-min) (point-max)))
+	   (json    (wsd-get-json message))
+	   (url     (wsd-get-image-url json)))
+      (save-excursion
 	(setq wsd-json json)
-        (url-copy-file url file-name t)))
-    ;;(if (graphics))
-    (if (image-type-available-p 'png)
-        (let* ((image-buffer-name (wsd-get-image-buffer-name buffer-name file-name)))
-	  (wsd-display-image-inline image-buffer-name file-name)
-	  (switch-to-buffer orig-buffer))
-      (browse-url file-name))))
+	(url-copy-file url file-name t))
 
+      (if (display-graphic-p)
+	  (if (wsd-image-format-supported-p)
+	      (let* ((image-buffer-name (wsd-get-image-buffer-name buffer-name file-name)))
+		(wsd-display-image-inline image-buffer-name file-name)
+		(switch-to-buffer orig-buffer))
+	    (browse-url file-name))
+	(message url)))))
+
+
+(defun wsd-show-diagram-online ()
+  "Shows the current buffer on www.websequencediagrams.com"
+  (interactive)
+  (let* ((message      (buffer-substring-no-properties (point-min) (point-max)))
+	 (encoded      (wsd-encode message))
+	 (url          (concat wsd-base-url "?m=" encoded)))
+    (browse-url url)))
 
 (provide 'wsd-core)
