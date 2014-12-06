@@ -36,4 +36,8 @@
   (local-set-key (kbd "C-c C-e") 'wsd-show-diagram-online)
   (local-set-key (kbd "C-c C-k") 'wsd-strip-errors))
 
+;;; Autoload mode trigger
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.wsd$" . wsd-mode))
+
 (provide 'wsd-mode)
