@@ -21,6 +21,7 @@
   (let* ((klist (wsd-create-font-lock-list face list)))
     (font-lock-add-keywords nil klist)))
 
+;;;###autoload
 (define-derived-mode wsd-mode fundamental-mode "wsd-mode"
   "Major-mode for websequencediagrams.com"
   (wsd-add-keywords 'font-lock-keyword-face
@@ -39,5 +40,9 @@
 ;;; Autoload mode trigger
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.wsd$" . wsd-mode))
+
+;;; Autoload to load actual mode.
+;;;###autoload
+(autoload 'wsd-mode "wsd-mode" "Emacs major-mode for www.websequencediagrams.com." t)
 
 (provide 'wsd-mode)
