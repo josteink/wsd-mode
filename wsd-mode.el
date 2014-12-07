@@ -24,29 +24,38 @@
 (defvar wsd-indent-offset 4
   "*Indentation offset for `wsd-mode'.")
 
+(defun wsd-line-starts-with (keyword)
+  (beginning-of-line-text)
+  (looking-at-p keyword))
+
+(defun wsd-previous-line-starts-with (keyword)
+  (previous-line)
+  (wsd-line-starts-with keyword))
+
 (defun wsd-indent-line ()
   "Indent current line for `wsd-mode'."
   (interactive)
   (let ((indent-col 0)
         (indent-mappings (list
-                          (cons "alt " '+)
-                          (cons "opt " '+)
-                          (cons "loop" '+)
-                          (cons "else" '+)
-                          (cons "else" '-)
-			  (cons "end" '-))))
+                          (list 'wsd-previous-line-starts-with "alt " '+)
+                          (list 'wsd-previous-line-starts-with "opt " '+)
+                          (list 'wsd-previous-line-starts-with "loop" '+)
+                          (list 'wsd-line-starts-with "else" '-)
+                          (list 'wsd-previous-line-starts-with "else" '+)
+                          (list 'wsd-line-starts-with "end" '-))))
     (save-excursion
       (beginning-of-line)
       (condition-case nil
           (while t
-            (previous-line)
             (beginning-of-line-text)
             (dolist (mapping indent-mappings)
-              (let* ((keyword (car mapping))
-                     (func    (cdr mapping)))
-                (when (looking-at keyword)
-                  (setq indent-col (funcall func indent-col wsd-indent-offset)))))
-)
+              (save-excursion
+                (let* ((look-up-func (car mapping))
+                       (keyword      (car (cdr mapping)))
+                       (func         (car (cdr (cdr mapping)))))
+                  (when (funcall look-up-func keyword)
+                    (setq indent-col (funcall func indent-col wsd-indent-offset))))))
+            (previous-line))
         (error nil)))
     (setq indent-col (max 0 indent-col))
     (indent-line-to indent-col)))
