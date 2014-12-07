@@ -14,7 +14,7 @@
 
 (defun wsd-create-font-lock-list (face list)
   (mapcar (lambda (i)
-            (list (regexp-quote i) 'quote face))
+            (cons (regexp-quote i) face))
           list))
 
 (defun wsd-add-keywords (face list)
@@ -28,10 +28,14 @@
                     '("title"
                       "participant" " as "
                       "deactivate" "activate"
-                      "alt" "else" "end"
+                      "alt" "else" "opt" "loop" "end"
                       "note" "over" "right" "left" "of"))
-  (wsd-add-keywords 'font-lock-comment-face
-                    '("-->-" "-->" "->+" "->-" "->" ": "))
+
+  ;; lines starting with # are actual commens
+  (let* ((operator-list '("-->-" "-->" "->+" "->-" "->" ": " "#"))
+	 (operators      (wsd-create-font-lock-list 'font-lock-comment-face operator-list)))
+    ;;(setq operators (cons (cons (regexp-quote "#") 'font-lock-command-face) operators))
+    (font-lock-add-keywords nil operators))
 
   (local-set-key (kbd "C-c C-c") 'wsd-show-diagram-inline)
   (local-set-key (kbd "C-c C-e") 'wsd-show-diagram-online)
