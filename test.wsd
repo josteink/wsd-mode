@@ -1,0 +1,30 @@
+
+title Yay
+
+participant User as u
+participant assistant as a
+
+u->+a: This is awesome.
+a-->-u: No it isn't.
+
+note right of a: This is a bit peculiar. yes indeed. mmm cool. really?
+
+note right of u: this is weird. is it?
+
+u->+a: Are you sure?
+
+activate a
+
+a->u: yes
+
+activate a
+
+note right of u: "Yes. Boo"
+
+deactivate u
+
+a-->-u: Obviously.
+
+
+# comment
+
