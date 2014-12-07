@@ -42,3 +42,5 @@ tramp
 # Packaging
 .tmp
 
+# generated diagram-files
+*png
