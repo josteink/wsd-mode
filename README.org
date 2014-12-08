@@ -6,16 +6,55 @@ wsd-mode is a Emacs major-mode for
 
 [[https://travis-ci.org/josteink/wsd-mode/][Travis-CI build-page]]. Build-status: [[https://api.travis-ci.org/josteink/wsd-mode.png]]
 
-** Goals / Features
+** Features
 
-The major-mode aims to provide the following features:
+The major-mode provides the following features:
 
-- auto-generating diagrams based on source.
 - proper syntax highlighting for all WSD syntax.
 - indentation based on nested constructs and alternative paths.
-- in buffer error-highlighting.
+- supports running Emacs in GUI and the terminal.
+- auto-generating diagrams based on source.
+- inline rendering in Emacs frames when possible, with fallback to OS or
+  browser for viewing when critical features are unavailable.
+
+** Installation
+
+Installation from MELPA will be available soon. When available, the installation
+should be a matter of ~M-x package-install <RET> wsd-mode <RET>~.
+
+** Usage
+
+Using wsd-mode is very easy. Either create a new buffer and activate using
+~M-x wsd-mode~, or open a new file with a ~.wsd~ extension. For files with
+a ~.wsd~ extension wsd-mode is activated automatically.
+
+Once the mode is active, type along as you would otherwise do on
+[[websequencediagrams.com]].
+
+*** Key-bindings
+
+| Key     | Action                                                      |
+|---------+-------------------------------------------------------------|
+| C-c C-c | "Build" diagram and display inline in Emacs (when possible) |
+| C-c C-e | "Export" diagram and show online on [[websequencediagrams.com]] |
+
+
+*** Customization
+
+wsd-mode supports a few customizable parameters. These will be documented
+once the package-status reaches stable.
+
+** Planned features
+
+The following features has been considered. They may eventually be
+implemented:
+
+- in-buffer highlighting of errors.
+- flymake/flycheck integration?
+- auto-insert-mode integration?
+- websequencediagram.com account-integration?
 
 ** Status
 
-was-mode is currently a work in progress. Once it reaches stable,
+wsd-mode is currently a work in progress. Once it reaches stable,
 package will be published on MELPA.
