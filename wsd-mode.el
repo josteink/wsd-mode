@@ -9,6 +9,7 @@
 ;;
 
 (require 'wsd-core)
+(require 'pcase)
 
 ;; notes about derived mode here: http://www.emacswiki.org/emacs/DerivedMode
 
@@ -24,37 +25,37 @@
 (defvar wsd-indent-offset 4
   "*Indentation offset for `wsd-mode'.")
 
-(defun wsd-line-starts-with (keyword)
-  (beginning-of-line-text)
-  (looking-at-p keyword))
+(defun wsd-any (predicate list)
+  (let* ((result nil))
+    (dolist (item list)
+      (setq result (or result
+                       (funcall predicate item))))
+    result))
 
-(defun wsd-previous-line-starts-with (keyword)
-  (previous-line)
-  (wsd-line-starts-with keyword))
+(defun wsd-line-starts-with (keywords)
+  (beginning-of-line-text)
+  (wsd-any 'looking-at-p keywords))
+
+(defun wsd-previous-line-starts-with (keywords)
+  (save-excursion
+    (previous-line)
+    (wsd-line-starts-with keywords)))
 
 (defun wsd-indent-line ()
   "Indent current line for `wsd-mode'."
   (interactive)
   (let ((indent-col 0)
-        (indent-mappings (list
-                          (list 'wsd-previous-line-starts-with "alt " '+)
-                          (list 'wsd-previous-line-starts-with "opt " '+)
-                          (list 'wsd-previous-line-starts-with "loop" '+)
-                          (list 'wsd-line-starts-with "else" '-)
-                          (list 'wsd-previous-line-starts-with "else" '+)
-                          (list 'wsd-line-starts-with "end" '-))))
+        (indent-mappings '((wsd-previous-line-starts-with ("alt " "opt " "loop" "else") +)
+                           (wsd-line-starts-with          ("end" "else") -))))
     (save-excursion
       (beginning-of-line)
       (condition-case nil
           (while t
             (beginning-of-line-text)
             (dolist (mapping indent-mappings)
-              (save-excursion
-                (let* ((look-up-func (car mapping))
-                       (keyword      (car (cdr mapping)))
-                       (func         (car (cdr (cdr mapping)))))
-                  (when (funcall look-up-func keyword)
-                    (setq indent-col (funcall func indent-col wsd-indent-offset))))))
+              (pcase-let* ((`(,look-up-func ,keywords ,indent-func) mapping))
+                (when (funcall look-up-func keywords)
+                  (setq indent-col (funcall indent-func indent-col wsd-indent-offset)))))
             (previous-line))
         (error nil)))
     (setq indent-col (max 0 indent-col))
