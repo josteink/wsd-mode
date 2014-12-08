@@ -1,30 +1,26 @@
 
-title Yay
+title How the internet works
 
 participant User as u
-participant assistant as a
+participant Browser as b
+participant Server as s
 
-u->+a: This is awesome.
-a-->-u: No it isn't.
+u->+b: Gimme web!
+b->+s: Gimme codez
 
-note right of a: This is a bit peculiar. yes indeed. mmm cool. really?
+# is a comment. actually supported by WSD
+# the "opt" keyword is like alt, except there's only one.
 
-note right of u: this is weird. is it?
+opt Authentication
 
-u->+a: Are you sure?
+    s-->-b: Gimme token!
+    b-->-u: Gimme password!
 
-activate a
+    u->+b: Password
+    b->+s: Hash
+    
+end
 
-a->u: yes
-
-activate a
-
-note right of u: "Yes. Boo"
-
-deactivate u
-
-a-->-u: Obviously.
-
-
-# comment
+s-->-b: HTMLz
+b-->-u: Webz
 
