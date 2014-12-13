@@ -34,9 +34,10 @@
 
 (defun wsd-line-starts-with (keywords)
   (beginning-of-line-text)
-  (let* ((word       (thing-at-point 'word t))
-	 (lower-word (downcase word)))
-    (wsd-any `(lambda (x) (equal ,lower-word x)) keywords)))
+  (let* ((word       (thing-at-point 'word t)))
+    (if (equalp nil word)
+	nil
+      (wsd-any `(lambda (x) (equal ,(downcase word) x)) keywords))))
 
 (defun wsd-previous-line-starts-with (keywords)
   (save-excursion
