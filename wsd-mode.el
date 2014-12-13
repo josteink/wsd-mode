@@ -50,8 +50,10 @@
   (indent-line-to (wsd-get-line-indent)))
 
 (defun wsd-previous-landmark ()
-  (interactive)
-  (previous-line))
+  ;;(interactive)
+  (forward-line -1)
+  ;;(previous-line)
+  )
 
 (defun wsd-get-line-indent ()
   (let ((indent-col 0)
