@@ -16,9 +16,20 @@ opt Authentication
     s-->-b: Gimme token!
     b-->-u: Gimme password!
 
-    u->+b: Password
-    b->+s: Hash
-    
+    alt Has password
+	
+	u->+b: Password
+	b->s: Hash
+	deactivate b
+
+
+    else No password
+
+	u->+b: Zeh cancel
+	b->+s: Zeh lulz
+	
+    end
+        
 end
 
 s-->-b: HTMLz
