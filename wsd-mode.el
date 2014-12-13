@@ -34,7 +34,9 @@
 
 (defun wsd-line-starts-with (keywords)
   (beginning-of-line-text)
-  (wsd-any 'looking-at-p keywords))
+  (let* ((word       (thing-at-point 'word t))
+	 (lower-word (downcase word)))
+    (wsd-any `(lambda (x) (equal ,lower-word x)) keywords)))
 
 (defun wsd-previous-line-starts-with (keywords)
   (save-excursion
@@ -44,8 +46,15 @@
 (defun wsd-indent-line ()
   "Indent current line for `wsd-mode'."
   (interactive)
+  (indent-line-to (wsd-get-line-indent)))
+
+(defun wsd-previous-landmark ()
+  (interactive)
+  (previous-line))
+
+(defun wsd-get-line-indent ()
   (let ((indent-col 0)
-        (indent-mappings '((wsd-previous-line-starts-with ("alt " "opt " "loop" "else") +)
+        (indent-mappings '((wsd-previous-line-starts-with ("alt" "opt" "loop" "else") +)
                            (wsd-line-starts-with          ("end" "else") -))))
     (save-excursion
       (beginning-of-line)
@@ -56,10 +65,14 @@
               (pcase-let* ((`(,look-up-func ,keywords ,indent-func) mapping))
                 (when (funcall look-up-func keywords)
                   (setq indent-col (funcall indent-func indent-col wsd-indent-offset)))))
-            (previous-line))
+            (wsd-previous-landmark))
         (error nil)))
-    (setq indent-col (max 0 indent-col))
-    (indent-line-to indent-col)))
+
+    (max 0 indent-col)))
+
+(defun wsd-get-line-debug ()
+  (interactive)
+  (print (wsd-get-line-indent)))
 
 ;;;###autoload
 (define-derived-mode wsd-mode fundamental-mode "wsd-mode"
@@ -80,6 +93,8 @@
   (local-set-key (kbd "C-c C-c") 'wsd-show-diagram-inline)
   (local-set-key (kbd "C-c C-e") 'wsd-show-diagram-online)
   (local-set-key (kbd "C-c C-k") 'wsd-strip-errors)
+  (local-set-key (kbd "C-c C-l") 'wsd-get-line-debug)
+  ;;(local-set-key (kbd "C-C C-p") 'wsd-previous-landmark)
 
   (make-local-variable 'wsd-indent-offset)
   (set (make-local-variable 'indent-line-function) 'wsd-indent-line))
