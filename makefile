@@ -9,7 +9,7 @@ ELS = wsd-mode.el wsd-core.el
 ELCS = $(ELS:.el=.elc)
 
 package: $(PACKAGE_DIR)
-	tar cvf ../$(PACKAGE_NAME).tar --exclude="*#" --exclude="*~" --exclude="*tests*" --exclude "*package-template*" --exclude="makefile" --exclude="run-travis-ci.sh" -C $(PACKAGE_DIR)/.. $(PACKAGE_NAME)
+	tar cvf ../$(PACKAGE_NAME).tar --exclude="*#" --exclude="*~" --exclude="*test*" --exclude "*package-template*" --exclude="makefile" --exclude="run-travis-ci.sh" -C $(PACKAGE_DIR)/.. $(PACKAGE_NAME)
 
 $(PACKAGE_DIR):
 	mkdir -p $@
