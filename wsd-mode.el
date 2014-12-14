@@ -2,11 +2,30 @@
 
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
 ;; Created    : December 2014
-;; Modified   : November 2014
-;; Version    : 0.0.1
+;; Modified   : December 2014
+;; Version    : 0.1.0
 ;; Keywords   : wsd diagrams design process modelling
 ;; X-URL      : https://github.com/josteink/wsd-mode
 ;;
+
+;;; Commentary:
+;;
+;; This is a major-mode for modelling and editing sequence-diagrams
+;; using the syntax employed by the online service
+;; www.websequencediagrams.com.
+;;
+;; It performs automatic keyword highlighting, indentation and also
+;; supports rendering of diagrams. Diagrams can be rendered inline in
+;; Emacs, or displayed via a OS-provided picture-viewer.
+;;
+;; It will automatically activate for files with a WSD-extension.
+;; If working with a saved buffer, it will also automatically save
+;; the generated diagrams next the buffer with an appropriate extension.
+;;
+
+;;; Versions:
+;;
+;;    0.1.0 - Initial release.
 
 (require 'wsd-core)
 
