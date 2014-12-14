@@ -14,13 +14,38 @@
 ;; using the syntax employed by the online service
 ;; www.websequencediagrams.com.
 ;;
-;; It performs automatic keyword highlighting, indentation and also
-;; supports rendering of diagrams. Diagrams can be rendered inline in
-;; Emacs, or displayed via a OS-provided picture-viewer.
+;; The mode supports inline rendering the diagrams through the API
+;; provided through the website and persisting these to image-files next
+;; to the files used to generate them.
 ;;
 ;; It will automatically activate for files with a WSD-extension.
-;; If working with a saved buffer, it will also automatically save
-;; the generated diagrams next the buffer with an appropriate extension.
+;;
+;;
+;; Features:
+;;
+;; - syntax higlighting of reccognized keywords
+;; - automatic indentation of block-statements
+;; - generating and saving diagrams generated through WSD's online API.
+;; - support for WSD premium features (svg-export, etc) if API-key is
+;;   provided.
+;; - rendering diagrams inline in emacs, or in external OS viewer if image
+;;   format is not supported by Emacs.
+;; 
+;;
+;; Customization:
+;;
+;; The mode can be slightly customized. Documenting this fully is on the
+;; TODO-list.
+;;
+;; To create mode-specific emacs-customizations, please use the
+;; wsd-mode-hook.
+;;
+;; A short summary of customizable variables:
+;;
+;; - wsd-api-key (default blank. required for premium-features.)
+;; - wsd-format (default png. svg requires premium, thus api-key.)
+;; - wsd-style (default modern-blue)
+;; - wsd-indent-offset (default 4)
 ;;
 
 ;;; Versions:
