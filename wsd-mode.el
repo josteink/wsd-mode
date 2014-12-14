@@ -9,7 +9,6 @@
 ;;
 
 (require 'wsd-core)
-(require 'pcase)
 
 ;; notes about derived mode here: http://www.emacswiki.org/emacs/DerivedMode
 
