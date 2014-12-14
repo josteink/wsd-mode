@@ -17,21 +17,19 @@ opt Authentication
     b-->-u: Gimme password!
 
     alt Has password
-	
-	u->+b: Password
-	b->s: Hash
-	deactivate b
 
+        u->+b: Password
+        b->s: Hash
+        deactivate b
 
     else No password
 
-	u->+b: Zeh cancel
-	b->+s: Zeh lulz
-	
+        u->+b: Zeh cancel
+        b->+s: Zeh lulz
+
     end
-        
+
 end
 
 s-->-b: HTMLz
 b-->-u: Webz
-
