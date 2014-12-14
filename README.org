@@ -19,8 +19,15 @@ The major-mode provides the following features:
 
 ** Installation
 
-Installation from MELPA will be available soon. When available, the installation
-should be a matter of ~M-x package-install <RET> wsd-mode <RET>~.
+wsd-mode can be installed as a package, from Marmalade, MELPA and MELPA stable.
+
+Installation from MELPA will be a development snapshot and always be latest version.
+Versions available from Marmalade and MELPA should match, and be more stable versions
+released at less frequent intervals.
+
+To install the package, simply start Emacs and issue the following command:
+
+~M-x package-install <RET> wsd-mode <RET>~.
 
 ** Usage
 
