@@ -39,43 +39,65 @@
 	nil
       (wsd-any `(lambda (x) (equal ,(downcase word) x)) keywords))))
 
-(defun wsd-previous-line-starts-with (keywords)
-  (save-excursion
-    (previous-line)
-    (wsd-line-starts-with keywords)))
-
 (defun wsd-indent-line ()
   "Indent current line for `wsd-mode'."
   (interactive)
   (indent-line-to (wsd-get-line-indent)))
 
-(defun wsd-previous-landmark ()
-  ;;(interactive)
-  (forward-line -1)
-  ;;(previous-line)
-  )
+(defun wsd-get-string-at-point ()
+  (let* ((thing (thing-at-point 'word t)))
+    (if (equal nil thing)
+        nil
+      (downcase thing))))
+
+;; else not included as it doesnt affect the -overall- indentation either way
+(defconst wsd-indentation-keywords '("alt" "opt" "loop" "end"))
+
+(defun wsd-is-indentation-keyword (word)
+  (and (not (equal nil word))
+       (member word wsd-indentation-keywords)))
+
+(defun wsd-get-buffer-indentation-keywords ()
+  "Returns the list of indentation-keywords found from the current point in the buffer, back to the start."
+  (interactive)
+
+  (save-excursion
+    (beginning-of-line)
+
+    (let* ((words '()))
+      (while (not (equal (point) (point-min)))
+        (beginning-of-line-text)
+        (let* ((word (wsd-get-string-at-point)))
+          (when (wsd-is-indentation-keyword word)
+            (setq words (cons word words))))
+        (beginning-of-line)
+        (forward-line -1))
+      words)))
+
+(defun wsd-get-indentation-from-keywords (keywords)
+  "Get the overall indentation from the supplied keywords."
+  (let* ((indent-col   0)
+	 (indent-plus  '("alt" "opt" "loop"))
+	 (indent-minus '("end")))
+    (dolist (keyword keywords)
+      (when (member keyword indent-plus)
+	(setq indent-col (+ indent-col wsd-indent-offset)))
+      (when (member keyword indent-minus)
+	(setq indent-col (- indent-col wsd-indent-offset)))
+      (setq indent-col (max 0 indent-col)))
+    indent-col))
+
+(defun wsd-get-adjustment-indent ()
+  "Adjust overall document indentation with specific reverse compensation for branch-starting keywords based on the current line."
+  (if (wsd-line-starts-with '("alt" "opt" "else"))
+      (- 0 wsd-indent-offset)
+    0))
 
 (defun wsd-get-line-indent ()
-  (let ((indent-col 0)
-        (indent-mappings '((wsd-previous-line-starts-with ("alt" "opt" "loop" "else") +)
-                           (wsd-line-starts-with          ("end" "else") -))))
-    (save-excursion
-      (beginning-of-line)
-      (condition-case nil
-          (while t
-            (beginning-of-line-text)
-            (dolist (mapping indent-mappings)
-              (pcase-let* ((`(,look-up-func ,keywords ,indent-func) mapping))
-                (when (funcall look-up-func keywords)
-                  (setq indent-col (funcall indent-func indent-col wsd-indent-offset)))))
-            (wsd-previous-landmark))
-        (error nil)))
-
-    (max 0 indent-col)))
-
-(defun wsd-get-line-debug ()
-  (interactive)
-  (print (wsd-get-line-indent)))
+  (let* ((keywords          (wsd-get-buffer-indentation-keywords))
+	 (keyword-indent    (wsd-get-indentation-from-keywords keywords))
+	 (adjustment-indent (wsd-get-adjustment-indent)))
+    (+ keyword-indent adjustment-indent)))
 
 ;;;###autoload
 (define-derived-mode wsd-mode fundamental-mode "wsd-mode"
@@ -96,8 +118,6 @@
   (local-set-key (kbd "C-c C-c") 'wsd-show-diagram-inline)
   (local-set-key (kbd "C-c C-e") 'wsd-show-diagram-online)
   (local-set-key (kbd "C-c C-k") 'wsd-strip-errors)
-  (local-set-key (kbd "C-c C-l") 'wsd-get-line-debug)
-  ;;(local-set-key (kbd "C-C C-p") 'wsd-previous-landmark)
 
   (make-local-variable 'wsd-indent-offset)
   (set (make-local-variable 'indent-line-function) 'wsd-indent-line))
