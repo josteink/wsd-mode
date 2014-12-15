@@ -9,12 +9,12 @@ ELS = wsd-mode.el wsd-core.el
 ELCS = $(ELS:.el=.elc)
 
 package: $(PACKAGE_DIR)
-	tar cvf ../$(PACKAGE_NAME).tar --exclude="*#" --exclude="*~" --exclude="*test*" --exclude "*package-template*" --exclude="makefile" --exclude="run-travis-ci.sh" -C $(PACKAGE_DIR)/.. $(PACKAGE_NAME)
+	tar cvf ../$(PACKAGE_NAME).tar --exclude="*#" --exclude="*~" --exclude="*test*" --exclude "*.template*" --exclude="makefile" --exclude="run-travis-ci.sh" -C $(PACKAGE_DIR)/.. $(PACKAGE_NAME)
 
 $(PACKAGE_DIR):
 	mkdir -p $@
 	cp -r ../$(PACKAGE_SHORTNAME)/* $@
-	sed -re "s/VERSION/$(VERSION)/" $@/$(PACKAGE_SHORTNAME)-package-template.el > $@/$(PACKAGE_SHORTNAME)-pkg.el
+	sed -re "s/VERSION/$(VERSION)/" $@/$(PACKAGE_SHORTNAME)-pkg.el.template > $@/$(PACKAGE_SHORTNAME)-pkg.el
 
 test:
 	+ $(EMACS) -l wsd-tests.el -f ert-run-tests-batch-and-exit
