@@ -171,10 +171,6 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.wsd$" . wsd-mode))
 
-;;; Autoload to load actual mode.
-;;;###autoload
-(autoload 'wsd-mode "wsd-mode" "Emacs major-mode for www.websequencediagrams.com." t)
-
 (provide 'wsd-mode)
 
 ;;; wsd-mode.el ends here
