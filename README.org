@@ -6,6 +6,19 @@ wsd-mode is a Emacs major-mode for
 
 [[https://travis-ci.org/josteink/wsd-mode/][Travis-CI build-page]]. Build-status: [[https://api.travis-ci.org/josteink/wsd-mode.png]]
 
+** wsd-mode explained in two screenshots
+
+Model processes through simple sequence-scripts like this:
+
+[[https://github.com/josteink/wsd-mode/raw/devel/artwork/wsd-mode-1.png]]
+
+And get pretty diagrams like this generated for you:
+
+[[https://github.com/josteink/wsd-mode/raw/devel/artwork/wsd-mode-2.png]]
+
+If that sounds interesting and you want to know how that works,
+feel free to read along.
+
 ** Features
 
 The major-mode provides the following features:
