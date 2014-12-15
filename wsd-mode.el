@@ -79,7 +79,7 @@
 (defun wsd-line-starts-with (keywords)
   (beginning-of-line-text)
   (let* ((word       (thing-at-point 'word t)))
-    (if (equalp nil word)
+    (if (equal nil word)
 	nil
       (wsd-any `(lambda (x) (equal ,(downcase word) x)) keywords))))
 
