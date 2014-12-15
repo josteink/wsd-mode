@@ -1,3 +1,4 @@
+
 ;;; wsd-mode.el --- Emacs major-mode for www.websequencediagrams.com
 
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
@@ -158,12 +159,13 @@
     ;;(setq operators (cons (cons (regexp-quote "#") 'font-lock-command-face) operators))
     (font-lock-add-keywords nil operators))
 
-  (local-set-key (kbd "C-c C-c") 'wsd-show-diagram-inline)
-  (local-set-key (kbd "C-c C-e") 'wsd-show-diagram-online)
-  (local-set-key (kbd "C-c C-k") 'wsd-strip-errors)
-
   (make-local-variable 'wsd-indent-offset)
   (set (make-local-variable 'indent-line-function) 'wsd-indent-line))
+
+(define-key wsd-mode-map (kbd "C-c C-c") 'wsd-show-diagram-inline)
+(define-key wsd-mode-map (kbd "C-c C-e") 'wsd-show-diagram-online)
+(define-key wsd-mode-map (kbd "C-c C-k") 'wsd-strip-errors)
+
 
 ;;; Autoload mode trigger
 ;;;###autoload
