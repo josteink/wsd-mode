@@ -61,8 +61,18 @@ Once the mode is active, type along as you would otherwise do on
 
 *** Customization
 
-wsd-mode supports a few customizable parameters. These will be documented
-once the package-status reaches stable.
+wsd-mode can be slightly customized. Documenting this fully is on the
+TODO-list.
+
+To create mode-specific emacs-customizations, please use the
+wsd-mode-hook.
+
+A short summary of customizable variables:
+
+- wsd-api-key (default blank. required for premium-features.)
+- wsd-format (default png. svg requires premium, thus api-key.)
+- wsd-style (default modern-blue)
+- wsd-indent-offset (default 4)
 
 ** Planned features
 
