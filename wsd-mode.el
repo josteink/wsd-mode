@@ -5,7 +5,7 @@
 ;; Created    : December 2014
 ;; Modified   : December 2014
 ;; Version    : 0.1.0
-;; Keywords   : wsd diagrams design process modelling
+;; Keywords   : wsd diagrams design process modelling uml
 ;; X-URL      : https://github.com/josteink/wsd-mode
 ;;
 
