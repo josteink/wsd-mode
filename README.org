@@ -74,7 +74,3 @@ implemented:
 - auto-insert-mode integration?
 - websequencediagram.com account-integration?
 
-** Status
-
-wsd-mode is currently a work in progress. Once it reaches stable,
-package will be published on MELPA.
