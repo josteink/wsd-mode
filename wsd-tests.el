@@ -1,5 +1,6 @@
 (require 'ert)
 (require 'wsd-core)
+(require 'wsd-mode)
 
 ;; test-helpers
 
@@ -42,6 +43,18 @@
     (should
      (equal (list wsd-test-error) errors))))
 
+(ert-deftest indentation-rules-behaves-like-expected ()
+  (dolist (test-run '((("alt") . 4)
+		      (("alt" "end") . 0)
+		      (("alt" "end" "alt") . 4)
+		      (("alt" "end" "end") . 0)
+		      (("alt" "end" "end" "alt") . 4)))
+    (let* ((test-data       (car test-run))
+	   (expected-result (cdr test-run))
+	   (actual-result   (wsd-get-indentation-from-keywords test-data)))
+      (should
+       (= expected-result actual-result)))))
+
 ;; (ert-deftest errors-are-interpeted ()
 ;;   (let* ((error-list  (wsd-get-errors wsd-test-json-error))
 ;;          (error-items (wsd-get-error-lines error-list))
@@ -52,3 +65,4 @@
 ;;     (should (= "Deactivate: User was not activated." (cdr first-error)))))
 
 ;;(ert-run-tests-interactively t)
+
