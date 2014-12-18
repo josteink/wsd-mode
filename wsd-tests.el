@@ -62,14 +62,13 @@
     (should
      (equal 'wsd-mode major-mode))))
 
-;; (ert-deftest errors-are-interpeted ()
-;;   (let* ((error-list  (wsd-get-errors wsd-test-json-error))
-;;          (error-items (wsd-get-error-lines error-list))
-;;          (first-error (car error-items)))
-;;     (should (= 1 (length error-items)))
+(ert-deftest errors-are-interpeted ()
+  (let* ((error-list  (wsd-get-errors wsd-test-json-error))
+         (error-items (wsd-get-error-lines error-list))
+         (first-error (car error-items)))
+    (should (= 1 (length error-items)))
 
-;;     (should (= 20 (car first-error)))
-;;     (should (= "Deactivate: User was not activated." (cdr first-error)))))
+    (should (= 20 (car first-error)))
+    (should (equal "Deactivate: User was not activated." (cdr first-error)))))
 
 ;;(ert-run-tests-interactively t)
-

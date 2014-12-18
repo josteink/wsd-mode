@@ -76,9 +76,13 @@
 
 (defun wsd-parse-error (entry)
   "Parses a single error-response as returned by the WSD server."
-  (let* ((line-num          '())
-	 (error-description '()))
-    (cons line-num error-description)))
+  (with-temp-buffer
+    (insert entry)
+    (beginning-of-buffer)
+    (search-forward-regexp "Line \\([[:digit:]]+\\): \\(.*\\)")
+    (let* ((line-num          (string-to-number (match-string 1)))
+	   (error-description (match-string 2)))
+      (cons line-num error-description))))
 
 (defun wsd-get-error-lines (error-list)
   "Processes and parses all the errors in the provided list."
