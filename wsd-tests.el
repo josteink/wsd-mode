@@ -56,6 +56,12 @@
       (should
        (= expected-result actual-result)))))
 
+(ert-deftest activating-mode-doesnt-cause-failure ()
+  (with-temp-buffer
+    (wsd-mode)
+    (should
+     (equal 'wsd-mode major-mode))))
+
 ;; (ert-deftest errors-are-interpeted ()
 ;;   (let* ((error-list  (wsd-get-errors wsd-test-json-error))
 ;;          (error-items (wsd-get-error-lines error-list))
