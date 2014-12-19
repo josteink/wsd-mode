@@ -41,7 +41,7 @@
   (let* ((encoded (wsd-encode message))
          (apikey  (wsd-get-apikey-section)))
     (concat "apiVersion=1"
-            "&format=png" wsd-format
+            "&format=" wsd-format
             "&style=" wsd-style
             "&message=" encoded
             apikey)))
