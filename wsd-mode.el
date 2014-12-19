@@ -59,7 +59,7 @@
 
 (defun wsd-create-font-lock-list (face list)
   (mapcar (lambda (i)
-            (cons (regexp-quote i) face))
+            (cons i face))
           list))
 
 (defun wsd-add-keywords (face list)
@@ -146,12 +146,15 @@
 ;;;###autoload
 (define-derived-mode wsd-mode fundamental-mode "wsd-mode"
   "Major-mode for websequencediagrams.com"
-  (wsd-add-keywords 'font-lock-keyword-face
-                    '("title"
-                      "participant" " as "
-                      "deactivate" "activate"
-                      "alt" "else" "opt" "loop" "end"
-                      "note" "over" "right" "left" "of"))
+  (let* ((line-starters (mapcar
+			 (lambda (kw) (concat "^[[:space:]]*" kw))
+			 '("title" "participant" "deactivate" "activate"
+			   "alt" "else" "opt" "loop" "end"
+			   "note")))
+	 (non-starters   '(" over " " right " " left " " of "
+			   " as "))
+	 (all-keywords    (append non-starters line-starters)))
+    (wsd-add-keywords 'font-lock-keyword-face all-keywords))
 
   ;; lines starting with # are actual commens
   (let* ((operator-list '("-->-" "-->" "->+" "->-" "->" ": " "#"))
