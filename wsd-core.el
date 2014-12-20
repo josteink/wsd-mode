@@ -104,7 +104,7 @@
 
 (defun wsd-get-image-buffer-name (buffer-name file-name)
   "Returns an appropriate corresponding buffer name to display resulting image in."
-  (if (not (buffer-name))
+  (if (not buffer-name)
       (concat "wsd-temp-buffer." wsd-format)
     file-name))
 
