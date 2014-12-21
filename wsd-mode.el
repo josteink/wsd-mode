@@ -53,6 +53,8 @@
 ;;
 ;;    0.1.0 - Initial release.
 
+;;; Code:
+
 (require 'wsd-core)
 
 ;; notes about derived mode here: http://www.emacswiki.org/emacs/DerivedMode

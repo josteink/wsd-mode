@@ -1,4 +1,6 @@
 
+;;; Code:
+
 ;; user-customizable sections
 
 ;; only required for premium-features.
@@ -127,7 +129,7 @@
   (image-type-available-p (intern wsd-format)))
 
 ;; for debugging
-(setq wsd-json nil)
+(defvar wsd-errors nil)
 
 (defun wsd-show-diagram-inline ()
   "Attempts to show the diagram provided by the current buffer inside an Emacs-buffer.
@@ -139,9 +141,10 @@
          (file-name   (wsd-get-image-filename buffer-name))
 	 (message (buffer-substring-no-properties (point-min) (point-max)))
 	 (json    (wsd-get-json message))
-	 (url     (wsd-get-image-url json)))
+	 (url     (wsd-get-image-url json))
+	 (errors  (wsd-get-error-lines (wsd-get-errors json))))
     (save-excursion
-      (setq wsd-json json)
+      (set (make-local-variable 'wsd-errors) errors)
       (url-copy-file url file-name t))
 
     (if (display-graphic-p)
@@ -165,3 +168,4 @@
     (browse-url url)))
 
 (provide 'wsd-core)
+;;; wsd-core.el ends here
