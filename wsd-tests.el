@@ -1,3 +1,10 @@
+;;; wsd-tests --- This file contains automated tests for wsd-mode.el
+
+;;; Commentary:
+;; Run tests using (ert-run-tests-interactively t).
+
+;;; Code:
+
 (require 'ert)
 (require 'wsd-core)
 (require 'wsd-mode)
@@ -13,7 +20,7 @@
                              str2 begin2 end2
                              ignore-case)))))
 
-(setq file-names '(nil "lalalala" "test.txt" "test.wsd" "test.a.wsd"))
+(setq file-names '("lalalala" "test.txt" "test.wsd" "test.a.wsd"))
 
 (ert-deftest local-filename-is-never-nil ()
   (dolist (file-name file-names)
@@ -72,3 +79,6 @@
     (should (equal "Deactivate: User was not activated." (cdr first-error)))))
 
 ;;(ert-run-tests-interactively t)
+
+(provide 'wsd-tests)
+;;; wsd-tests.el ends here
