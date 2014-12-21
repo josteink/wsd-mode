@@ -52,8 +52,9 @@
 ;;; Versions:
 ;;
 ;;    0.1.0 - Initial release.
-;;    0.2.0 - Fix file-format bug.
+;;    0.2.0 - Fix file-format bug and temp-buffer reuse.
 ;;            Improved syntax-highlighting.
+;;            Fix OSX rendering issues.
 
 ;;; Code:
 
