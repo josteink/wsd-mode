@@ -41,7 +41,7 @@
   (let* ((encoded (wsd-encode message))
          (apikey  (wsd-get-apikey-section)))
     (concat "apiVersion=1"
-            "&format=png" wsd-format
+            "&format=" wsd-format
             "&style=" wsd-style
             "&message=" encoded
             apikey)))
@@ -106,7 +106,7 @@
 
 (defun wsd-get-image-buffer-name (buffer-name file-name)
   "Returns an appropriate corresponding buffer name to display resulting image in."
-  (if (not (buffer-name))
+  (if (not buffer-name)
       (concat "wsd-temp-buffer." wsd-format)
     file-name))
 
