@@ -78,7 +78,7 @@
   "Parses a single error-response as returned by the WSD server."
   (with-temp-buffer
     (insert entry)
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (search-forward-regexp "Line \\([[:digit:]]+\\): \\(.*\\)")
     (let* ((line-num          (string-to-number (match-string 1)))
 	   (error-description (match-string 2)))
