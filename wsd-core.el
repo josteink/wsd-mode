@@ -102,7 +102,7 @@
   "Returns an appropriate corresponding image-filename for a given buffer."
   (if name
       (concat (file-name-sans-extension name) (wsd-get-image-extension))
-    (wsd-get-temp-filename)))
+    nil))
 
 (defun wsd-get-image-buffer-name (buffer-name file-name)
   "Returns an appropriate corresponding buffer name to display resulting image in."
@@ -138,6 +138,8 @@
   (interactive)
   (let* ((orig-buffer (buffer-name))
          (buffer-name (buffer-file-name))
+	 (temp-name   (wsd-get-temp-filename))
+	 ;; only required for saved buffers.
          (file-name   (wsd-get-image-filename buffer-name))
 	 (message (buffer-substring-no-properties (point-min) (point-max)))
 	 (json    (wsd-get-json message))
@@ -145,17 +147,23 @@
 	 (errors  (wsd-get-error-lines (wsd-get-errors json))))
     (save-excursion
       (set (make-local-variable 'wsd-errors) errors)
-      (url-copy-file url file-name t))
+      (url-copy-file url temp-name t)
+
+      ;; only copy to file when in a saved buffer
+      (when file-name
+	(copy-file temp-name file-name t t t)))
 
     (if (display-graphic-p)
 	(if (wsd-image-format-supported-p)
 	    (let* ((image-buffer-name (wsd-get-image-buffer-name buffer-name file-name))
 		   (buffer-exists     (get-buffer image-buffer-name)))
-	      (wsd-display-image-inline image-buffer-name file-name)
+	      ;; display image from temp-area because of bug in OSX Emacs.
+	      ;; https://github.com/josteink/wsd-mode/issues/11
+	      (wsd-display-image-inline image-buffer-name temp-name)
 	      (switch-to-buffer orig-buffer)
 	      (when (not buffer-exists)
 		(switch-to-buffer-other-window image-buffer-name)))
-	  (browse-url file-name))
+	  (browse-url temp-name))
       (message url))))
 
 
