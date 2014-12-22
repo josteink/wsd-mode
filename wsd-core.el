@@ -128,8 +128,9 @@
   "Helper function to determine if we can display the image we're generating."
   (image-type-available-p (intern wsd-format)))
 
-;; for debugging
-(defvar wsd-errors nil)
+;; buffer-local state variables
+(defvar wsd-errors nil) ; for flycheck
+(defvar wsd-last-temp-file nil)
 
 (defun wsd-show-diagram-inline ()
   "Attempts to show the diagram provided by the current buffer inside an Emacs-buffer.
@@ -162,7 +163,13 @@
 	      (wsd-display-image-inline image-buffer-name temp-name)
 	      (switch-to-buffer orig-buffer)
 	      (when (not buffer-exists)
-		(switch-to-buffer-other-window image-buffer-name)))
+		(switch-to-buffer-other-window image-buffer-name))
+
+	      ;; avoid ending up with a flurry of temp-files.
+	      (when wsd-last-temp-file
+		(delete-file wsd-last-temp-file))
+	      
+	      (set (make-local-variable 'wsd-last-temp-file) temp-name))
 	  (browse-url temp-name))
       (message url))))
 
