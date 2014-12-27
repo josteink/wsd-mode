@@ -155,6 +155,10 @@ Checks weather `BUFFER-NAME' already exists, and if not create as needed."
 (defvar wsd-errors nil) ; for flycheck
 (defvar wsd-last-temp-file nil)
 
+(defvar wsd-mode-processing-complete-hook nil
+  "Hook called when wsd-mode has processed the script in the current buffer.
+Hook is called with an `ERROR' parameter.")
+
 (defun wsd-show-diagram-inline ()
   "Attempt to show the diagram provided by the current buffer inside Emacs.
 
@@ -178,6 +182,9 @@ to the operating-system to open the local copy."
       (when file-name
 	(copy-file temp-name file-name t t t)))
 
+    (when wsd-mode-processing-complete-hook
+      (run-hook-with-args 'wsd-mode-processing-complete-hook errors))
+    
     (if (display-graphic-p)
 	(if (wsd-image-format-supported-p)
 	    (let* ((image-buffer-name (wsd-get-image-buffer-name buffer-name file-name))

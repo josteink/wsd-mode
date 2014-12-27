@@ -10,6 +10,8 @@
 (require 'wsd-mode)
 (require 'ob-wsdmode)
 
+;;(require 'wsd-flycheck)
+
 ;; test-helpers
 
 (when (not (fboundp 'string-suffix-p))
@@ -116,6 +118,12 @@
                       (face-at-point))))))
 
     (kill-buffer buffer)))
+
+;; (ert-deftest flycheck-errors-are-returned ()
+;;   (let* ((result (wsd-flycheck-parse-errors
+;;                   'wsd-mode-checker
+;;                   '((33 . "Error: end without prior group.") (34 . "Error: end without prior group.")))))
+;;     (should (not (equal nil result)))))
 
 ;;(ert-run-tests-interactively t)
 

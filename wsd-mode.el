@@ -179,16 +179,23 @@
                                       (cons rx-operators 'font-lock-comment-face))))
 
   (make-local-variable 'wsd-indent-offset)
-  (set (make-local-variable 'indent-line-function) 'wsd-indent-line))
+  (set (make-local-variable 'indent-line-function) 'wsd-indent-line)
+
+  (when (fboundp 'flycheck-mode)
+    (flycheck-mode-on-safe)))
 
 (define-key wsd-mode-map (kbd "C-c C-c") #'wsd-show-diagram-inline)
 (define-key wsd-mode-map (kbd "C-c C-e") #'wsd-show-diagram-online)
-(define-key wsd-mode-map (kbd "C-c C-k") #'wsd-strip-errors)
+;; (define-key wsd-mode-map (kbd "C-c C-k") #'wsd-strip-errors)
 
 
 ;;; Autoload mode trigger
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.wsd$" . wsd-mode))
+
+;; Flycheck support must be loaded after other code has been intialized.
+(ignore-errors
+  (require 'wsd-flycheck))
 
 (provide 'wsd-mode)
 
