@@ -58,7 +58,7 @@
       (goto-char (point-min))
       ;; move to beginning of JSON response
       (search-forward "{")
-      (left-char)
+      (backward-char)
       ;; parse and return json at point
 
       (let* ((json (json-read)))
