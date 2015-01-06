@@ -55,6 +55,7 @@
 ;;    0.2.0 - Fix file-format bug and temp-buffer reuse.
 ;;            Improved syntax-highlighting.
 ;;            Fix OSX rendering issues.
+;;    0.3.0 - Fix compatiblity issues with Emacs 24.3.
 
 ;;; Code:
 
