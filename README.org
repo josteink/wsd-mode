@@ -29,6 +29,7 @@ The major-mode provides the following features:
 - auto-generating diagrams based on source.
 - inline rendering in Emacs frames when possible, with fallback to OS or
   browser for viewing when critical features are unavailable.
+- ~org-babel~ support (use ~wsd~ as language).
 
 ** Installation
 

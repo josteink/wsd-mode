@@ -4,7 +4,7 @@
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
 ;; Created    : December 2014
 ;; Modified   : December 2014
-;; Version    : 0.2.0
+;; Version    : 0.3.0
 ;; Keywords   : wsd diagrams design process modelling uml
 ;; X-URL      : https://github.com/josteink/wsd-mode
 ;;
@@ -56,10 +56,14 @@
 ;;            Improved syntax-highlighting.
 ;;            Fix OSX rendering issues.
 ;;    0.3.0 - Fix compatiblity issues with Emacs 24.3.
+;;            Improved org-babel support.
 
 ;;; Code:
 
 (require 'wsd-core)
+
+(ignore-errors
+  (require 'ob-wsdmode))
 
 ;; notes about derived mode here: http://www.emacswiki.org/emacs/DerivedMode
 
