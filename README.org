@@ -70,6 +70,7 @@ wsd-mode-hook.
 
 A short summary of customizable variables:
 
+- wsd-base-url (default "http://www.websequencediagrams.com/". The URL of your in-house WSD installation)
 - wsd-api-key (default blank. required for premium-features.)
 - wsd-format (default png. svg requires premium, thus api-key.)
 - wsd-style (default modern-blue)
