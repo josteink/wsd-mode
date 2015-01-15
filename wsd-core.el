@@ -11,6 +11,8 @@
 (defvar wsd-format "png")
 (defvar wsd-style "modern-blue")
 
+(defvar wsd-base-url "http://www.websequencediagrams.com/")
+
 ;; actual code
 
 ;; implementation based on documentation as found here:
@@ -18,8 +20,6 @@
 
 (require 'url)
 (require 'json)
-
-(defconst wsd-base-url "http://www.websequencediagrams.com/")
 
 (defun wsd-get-apikey-section ()
   "Returns a key-value pair for the API-key to be user in request data, delimiters included.
