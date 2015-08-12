@@ -1,7 +1,6 @@
-
 * wsd-mode
 
-wsd-mode is a Emacs major-mode for 
+wsd-mode is a Emacs major-mode for
 [[http://www.websequencediagrams.com][www.websequencediagrams.com]].
 
 [[https://travis-ci.org/josteink/wsd-mode/][Travis-CI build-page]]. Build-status: [[https://api.travis-ci.org/josteink/wsd-mode.png]]
@@ -62,13 +61,11 @@ Once the mode is active, type along as you would otherwise do on
 
 *** Customization
 
-wsd-mode can be slightly customized. Documenting this fully is on the
-TODO-list.
+Customization is available in the normal Emacs customize framework.
 
-To create mode-specific emacs-customizations, please use the
-wsd-mode-hook.
+~M-x customize-group <RET> wsd-mode~
 
-A short summary of customizable variables:
+Briefly, here are the defaults for the variables which can be customized:
 
 - wsd-base-url (default "http://www.websequencediagrams.com/". The URL of your in-house WSD installation)
 - wsd-api-key (default blank. required for premium-features.)
@@ -85,4 +82,3 @@ implemented:
 - flymake/flycheck integration?
 - auto-insert-mode integration?
 - websequencediagram.com account-integration?
-
