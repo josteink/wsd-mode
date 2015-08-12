@@ -1,10 +1,9 @@
-
 ;;; wsd-mode.el --- Emacs major-mode for www.websequencediagrams.com
 
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
 ;; Created    : December 2014
-;; Modified   : December 2014
-;; Version    : 0.3.0
+;; Modified   : August 2015
+;; Version    : 0.4.0
 ;; Keywords   : wsd diagrams design process modelling uml
 ;; X-URL      : https://github.com/josteink/wsd-mode
 ;;
@@ -31,7 +30,7 @@
 ;;   provided.
 ;; - rendering diagrams inline in emacs, or in external OS viewer if image
 ;;   format is not supported by Emacs.
-;; 
+;;
 ;;
 ;; Customization:
 ;;
@@ -57,6 +56,7 @@
 ;;            Fix OSX rendering issues.
 ;;    0.3.0 - Fix compatiblity issues with Emacs 24.3.
 ;;            Improved org-babel support.
+;;    0.4.0 - integrate with customize framework
 
 ;;; Code:
 
@@ -76,8 +76,10 @@
   (let* ((klist (wsd-create-font-lock-list face list)))
     (font-lock-add-keywords nil klist)))
 
-(defvar wsd-indent-offset 4
-  "*Indentation offset for `wsd-mode'.")
+(defcustom wsd-indent-offset 4
+  "Indentation offset for `wsd-mode'."
+  :type 'integer
+  :group 'wsd-mode)
 
 (defun wsd-any (predicate list)
   (let* ((result nil))

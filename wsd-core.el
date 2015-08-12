@@ -1,17 +1,37 @@
-
+;;; wsd-core --- Summary
+;;;
+;;; Commentary:
+;;;   Core code for wsd-mode
+;;;
 ;;; Code:
 
 ;; user-customizable sections
 
 ;; only required for premium-features.
-(defvar wsd-api-key "")
+
+(defcustom wsd-api-key nil
+  "Key for use with premium features."
+  :type 'string
+  :group 'wsd-mode)
 
 ;; "svg" is also a permitted format, but this requires a premium account
 ;; and thus a api-key.
-(defvar wsd-format "png")
-(defvar wsd-style "modern-blue")
+(defcustom wsd-format "png"
+  "Image format to use when generating the diagram.
+The svg format is also permitted, but requires a premium
+account."
+  :type '(choice (const "png") (const "svg"))
+  :group 'wsd-mode)
 
-(defvar wsd-base-url "http://www.websequencediagrams.com/")
+(defcustom wsd-style "modern-blue"
+  "Output style, default is modern-blue."
+  :type '(choice (const "plain-uml") (const "rose") (const "qsd") (const "napkin") (const "vs2010") (const "mscgen") (const "patent") (const "omegapple") (const "modern-blue") (const "earth") (const "roundgreen") (const "magazine"))
+  :group 'wsd-mode)
+
+(defcustom wsd-base-url "http://www.websequencediagrams.com/"
+  "Default base URL."
+  :type 'string
+  :group 'wsd-mode)
 
 ;; actual code
 
@@ -168,7 +188,7 @@
 	      ;; avoid ending up with a flurry of temp-files.
 	      (when wsd-last-temp-file
 		(delete-file wsd-last-temp-file))
-	      
+
 	      (set (make-local-variable 'wsd-last-temp-file) temp-name))
 	  (browse-url temp-name))
       (message url))))
