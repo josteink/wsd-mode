@@ -27,6 +27,6 @@ all: $(ELCS) test package
 clean:
 	rm -f ../$(PACKAGE_NAME).tar
 	rm -rf $(PACKAGE_DIR)
-	rm -rf $ELCS
+	rm -rf $(ELCS)
 
 # end
