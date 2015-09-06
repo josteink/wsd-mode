@@ -67,15 +67,6 @@
 
 ;; notes about derived mode here: http://www.emacswiki.org/emacs/DerivedMode
 
-(defun wsd-create-font-lock-list (face list)
-  (mapcar (lambda (i)
-            (cons i face))
-          list))
-
-(defun wsd-add-keywords (face list)
-  (let* ((klist (wsd-create-font-lock-list face list)))
-    (font-lock-add-keywords nil klist)))
-
 (defcustom wsd-indent-offset 4
   "Indentation offset for `wsd-mode'."
   :type 'integer
@@ -151,28 +142,33 @@
 
 (defun wsd-get-line-indent ()
   (let* ((keywords          (wsd-get-buffer-indentation-keywords))
-	 (keyword-indent    (wsd-get-indentation-from-keywords keywords))
-	 (adjustment-indent (wsd-get-adjustment-indent)))
+         (keyword-indent    (wsd-get-indentation-from-keywords keywords))
+         (adjustment-indent (wsd-get-adjustment-indent)))
     (+ keyword-indent adjustment-indent)))
 
 ;;;###autoload
 (define-derived-mode wsd-mode fundamental-mode "wsd-mode"
   "Major-mode for websequencediagrams.com"
-  (let* ((line-starters (mapcar
-			 (lambda (kw) (concat "^[[:space:]]*" kw))
-			 '("title" "participant" "deactivate" "activate"
-			   "alt" "else" "opt" "loop" "end"
-			   "note")))
-	 (non-starters   '(" over " " right " " left " " of "
-			   " as "))
-	 (all-keywords    (append non-starters line-starters)))
-    (wsd-add-keywords 'font-lock-keyword-face all-keywords))
+  (let* (;; some keywords should only trigger when starting a line.
+         (line-starters '("title" "participant" "deactivate" "activate"
+                          "alt" "else" "opt" "loop" "end" "note"))
+         ;; combine into one big OR regexp, ^<> start of line, whole word only.
+         (rx-line-starters (concat "^\\<" (regexp-opt line-starters t) "\\>"))
 
-  ;; lines starting with # are actual commens
-  (let* ((operator-list '("-->-" "-->" "->+" "->-" "->" ": " "#"))
-         (operators      (wsd-create-font-lock-list 'font-lock-comment-face operator-list)))
-    ;;(setq operators (cons (cons (regexp-quote "#") 'font-lock-command-face) operators))
-    (font-lock-add-keywords nil operators))
+         ;; some keywords are OK almost anywhere, or at least treat them as such.
+         (keywords '("over" "right" "left" "of" "as"))
+         (rx-keywords (concat "\\<" (regexp-opt keywords t) "\\>"))
+
+         ;; lines starting with # are treated as comments
+         (rx-comments "#.*$")
+
+         ;; operators
+         (operators '("-->-" "-->" "->+" "->-" "->" ": "))
+         (rx-operators (regexp-opt operators t)))
+    (font-lock-add-keywords nil (list (cons rx-keywords 'font-lock-keyword-face)
+                                      (cons rx-line-starters 'font-lock-keyword-face)
+                                      (cons rx-comments 'font-lock-comment-face)
+                                      (cons rx-operators 'font-lock-comment-face))))
 
   (make-local-variable 'wsd-indent-offset)
   (set (make-local-variable 'indent-line-function) 'wsd-indent-line))
