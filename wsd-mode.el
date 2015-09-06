@@ -83,7 +83,7 @@
   (beginning-of-line-text)
   (let* ((word       (thing-at-point 'word t)))
     (if (equal nil word)
-	nil
+        nil
       (wsd-any `(lambda (x) (equal ,(downcase word) x)) keywords))))
 
 (defun wsd-indent-line ()
@@ -124,13 +124,13 @@
 (defun wsd-get-indentation-from-keywords (keywords)
   "Get the overall indentation from the supplied keywords."
   (let* ((indent-col   0)
-	 (indent-plus  '("alt" "opt" "loop"))
-	 (indent-minus '("end")))
+         (indent-plus  '("alt" "opt" "loop"))
+         (indent-minus '("end")))
     (dolist (keyword keywords)
       (when (member keyword indent-plus)
-	(setq indent-col (+ indent-col wsd-indent-offset)))
+        (setq indent-col (+ indent-col wsd-indent-offset)))
       (when (member keyword indent-minus)
-	(setq indent-col (- indent-col wsd-indent-offset)))
+        (setq indent-col (- indent-col wsd-indent-offset)))
       (setq indent-col (max 0 indent-col)))
     indent-col))
 
