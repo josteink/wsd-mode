@@ -73,6 +73,7 @@
   :group 'wsd-mode)
 
 (defun wsd-any (predicate list)
+  "Check if `PREDICATE' yields true for any item in `LIST'."
   (let* ((result nil))
     (dolist (item list)
       (setq result (or result
@@ -92,6 +93,9 @@
   (indent-line-to (wsd-get-line-indent)))
 
 (defun wsd-get-string-at-point ()
+  "Return the string at the current point.
+
+   Handles nullability and down-casing."
   (let* ((thing (thing-at-point 'word t)))
     (if (equal nil thing)
         nil
@@ -101,11 +105,12 @@
 (defconst wsd-indentation-keywords '("alt" "opt" "loop" "end"))
 
 (defun wsd-is-indentation-keyword (word)
+  "Return true if `WORD' should cause indentation-changes."
   (and (not (equal nil word))
        (member word wsd-indentation-keywords)))
 
 (defun wsd-get-buffer-indentation-keywords ()
-  "Returns the list of indentation-keywords found from the current point in the buffer, back to the start."
+  "Return the list of indentation-keywords found from the current point in the buffer, back to the start."
   (interactive)
 
   (save-excursion
@@ -122,7 +127,7 @@
       words)))
 
 (defun wsd-get-indentation-from-keywords (keywords)
-  "Get the overall indentation from the supplied keywords."
+  "Get the overall indentation from the supplied `KEYWORDS'."
   (let* ((indent-col   0)
          (indent-plus  '("alt" "opt" "loop"))
          (indent-minus '("end")))
@@ -141,6 +146,7 @@
     0))
 
 (defun wsd-get-line-indent ()
+  "Get the indentation level of the current line."
   (let* ((keywords          (wsd-get-buffer-indentation-keywords))
          (keyword-indent    (wsd-get-indentation-from-keywords keywords))
          (adjustment-indent (wsd-get-adjustment-indent)))

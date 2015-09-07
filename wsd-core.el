@@ -42,14 +42,15 @@ account."
 (require 'json)
 
 (defun wsd-get-apikey-section ()
-  "Returns a key-value pair for the API-key to be user in request data, delimiters included.
-   If no api-key is used, returns nil."
+  "Return a key-value pair for the API-key to be user in request data.
+
+Delimiters included.  If no api-key is used, returns nil."
   (if wsd-api-key
       (concat "&apikey=" wsd-api-key)
     ""))
 
 (defun wsd-encode (message)
-  "Encodes the provided message into something which can be transported over HTTP."
+  "Encodes the provided `MESSAGE' into something which can be transported over HTTP."
   (let* ((encode1 (replace-regexp-in-string (regexp-quote "+")
                                             (regexp-quote "%2B")
                                             message))
@@ -57,7 +58,7 @@ account."
     encode2))
 
 (defun wsd-get-request-data (message)
-  "Gets the request-data for a HTTP post to the wsd.com API."
+  "Transform `MESSAGE' into request-data for a HTTP post to the wsd.com API."
   (let* ((encoded (wsd-encode message))
          (apikey  (wsd-get-apikey-section)))
     (concat "apiVersion=1"
@@ -67,7 +68,7 @@ account."
             apikey)))
 
 (defun wsd-get-json (message)
-  "Sends the provided message to the server and returns the server's JSON-response."
+  "Send `MESSAGE' to the server and return the server's JSON-response."
   (let* ((url-request-method        "POST")
          (url-request-extra-headers '(("Content-Type" . "application/x-www-form-urlencoded")))
          (url-request-data          (wsd-get-request-data message))
@@ -86,18 +87,18 @@ account."
         json))))
 
 (defun wsd-get-image-url (json)
-  "Based on the server's JSON-response, extracts the image-url to the resulting image."
+  "Extract the image-url based on the server's `JSON'-response."
   (let* ((url (concat wsd-base-url
                       (cdr (assoc 'img json)))))
     url))
 
 (defun wsd-get-errors (json)
-  "Based on the server's JSON-response, extracts error-elements."
+  "Extract the error-elements based on the server's `JSON'-response."
   (let* ((errors (cdr (assoc 'errors json))))
     (append errors '())))
 
 (defun wsd-parse-error (entry)
-  "Parses a single error-response as returned by the WSD server."
+  "Parse a single error-response `ENTRY' returned by the WSD server."
   (with-temp-buffer
     (insert entry)
     (goto-char (point-min))
@@ -107,31 +108,33 @@ account."
       (cons line-num error-description))))
 
 (defun wsd-get-error-lines (error-list)
-  "Processes and parses all the errors in the provided list."
-  (mapcar 'wsd-parse-error error-list))
+  "Process and parse all the errors in `ERROR-LIST'."
+  (mapcar #'wsd-parse-error error-list))
 
 (defun wsd-get-image-extension ()
-  "Returns the file-name extension to be used based on the current wsd-mode configuration."
+  "Return the file-name extension to be used based on the current wsd-mode configuration."
   (concat "." wsd-format))
 
 (defun wsd-get-temp-filename ()
-  "Returns an appropriate corresponding image-filename for a given non-persisted buffer."
+  "Return an appropriate corresponding image-filename for a given non-persisted buffer."
   (make-temp-file "wsd-" nil (wsd-get-image-extension)))
 
 (defun wsd-get-image-filename (name)
-  "Returns an appropriate corresponding image-filename for a given buffer."
+  "Return an appropriate corresponding image-filename for a buffer `NAME'."
   (if name
       (concat (file-name-sans-extension name) (wsd-get-image-extension))
     nil))
 
 (defun wsd-get-image-buffer-name (buffer-name file-name)
-  "Returns an appropriate corresponding buffer name to display resulting image in."
+  "Return an appropriate corresponding buffer name to display resulting image in."
   (if (not buffer-name)
       (concat "wsd-temp-buffer." wsd-format)
     file-name))
 
 (defun wsd-display-image-inline (buffer-name file-name)
-  "Displays the provided image in the provided buffer. Buffer is created if non-existant."
+  "Use `BUFFER-NAME' to display the image in `FILE-NAME'.
+
+Checks weather `BUFFER-NAME' already exists, and if not create as needed."
   (save-excursion
     (switch-to-buffer buffer-name)
     (iimage-mode t)
@@ -153,9 +156,10 @@ account."
 (defvar wsd-last-temp-file nil)
 
 (defun wsd-show-diagram-inline ()
-  "Attempts to show the diagram provided by the current buffer inside an Emacs-buffer.
-   If emacs lacks format for the given graphics-format it will be delegated to the
-   operating-system to open the local copy."
+  "Attempt to show the diagram provided by the current buffer inside Emacs.
+
+If Emacs lacks format for the given graphics-format it will be delegated
+to the operating-system to open the local copy."
   (interactive)
   (let* ((orig-buffer (buffer-name))
          (buffer-name (buffer-file-name))
@@ -195,7 +199,7 @@ account."
 
 
 (defun wsd-show-diagram-online ()
-  "Shows the current buffer on www.websequencediagrams.com"
+  "Show the current buffer on www.websequencediagrams.com."
   (interactive)
   (let* ((message      (buffer-substring-no-properties (point-min) (point-max)))
 	 (encoded      (wsd-encode message))
