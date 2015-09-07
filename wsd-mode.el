@@ -159,7 +159,7 @@
          (line-starters '("title" "participant" "deactivate" "activate"
                           "alt" "else" "opt" "loop" "end" "note"))
          ;; combine into one big OR regexp, ^<> start of line, whole word only.
-         (rx-line-starters (concat "^\\<" (regexp-opt line-starters t) "\\>"))
+         (rx-line-starters (concat "^[[:space:]]*\\<" (regexp-opt line-starters t) "\\>"))
 
          ;; some keywords are OK almost anywhere, or at least treat them as such.
          (keywords '("over" "right" "left" "of" "as"))
