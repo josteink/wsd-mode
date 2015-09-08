@@ -194,9 +194,23 @@ to the operating-system to open the local copy."
 		(delete-file wsd-last-temp-file))
 
 	      (set (make-local-variable 'wsd-last-temp-file) temp-name))
-	  (browse-url temp-name))
+	  (wsd-browse-url temp-name))
       (message url))))
 
+(defun wsd-browse-url (url)
+  "Open `URL' in a browser which can support image-formats not understood by emacs."
+
+  ;; Some people have eww bound as the default-browser.
+  ;;
+  ;; If we're being invoked it's because Emacs doesn't support the image-format
+  ;; being used. That means eww wont be able to display it either.
+  ;; Therefore if eww is available, we force launching in external browser,
+  ;; using eww's own implementation.
+  ;;
+  ;; This way we should be guaranteed to always use an external viewer.
+  (if (fboundp 'eww-browse-with-external-browser)
+      (eww-browse-with-external-browser url)
+    (browse-url url)))
 
 (defun wsd-show-diagram-online ()
   "Show the current buffer on www.websequencediagrams.com."
