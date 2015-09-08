@@ -179,9 +179,9 @@
   (make-local-variable 'wsd-indent-offset)
   (set (make-local-variable 'indent-line-function) 'wsd-indent-line))
 
-(define-key wsd-mode-map (kbd "C-c C-c") 'wsd-show-diagram-inline)
-(define-key wsd-mode-map (kbd "C-c C-e") 'wsd-show-diagram-online)
-(define-key wsd-mode-map (kbd "C-c C-k") 'wsd-strip-errors)
+(define-key wsd-mode-map (kbd "C-c C-c") #'wsd-show-diagram-inline)
+(define-key wsd-mode-map (kbd "C-c C-e") #'wsd-show-diagram-online)
+(define-key wsd-mode-map (kbd "C-c C-k") #'wsd-strip-errors)
 
 
 ;;; Autoload mode trigger
