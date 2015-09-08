@@ -41,6 +41,8 @@ This function is called by `org-babel-execute-src-block'."
          (img-file (if out-file
                        out-file
                      (wsd-get-temp-filename)))
+         ;; override preference based on whatever filename says.
+         (wsd-format (file-name-extension img-file))
          (json      (wsd-get-json body))
          (image-url (wsd-get-image-url json))
          (errors    (wsd-get-errors json)))
