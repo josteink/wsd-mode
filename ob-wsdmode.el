@@ -49,9 +49,20 @@ This function is called by `org-babel-execute-src-block'."
 
     (when (not (= 0 (length errors)))
       (error "Errors reported from websequence-diagrams service!"))
-    
+
     (url-copy-file image-url img-file t)
-    img-file))
+
+    ;; org-babel :file is special cased. if provided by the document
+    ;; any non-nil data we return will be written to that file.
+    ;;
+    ;; When not provided org will interpret our-return data as a file-name to
+    ;; use.
+    ;;
+    ;; Therefore only return file-name when we have generated it. Otherwise
+    ;, return nil.
+    (if out-file
+        nil
+      img-file)))
 
 (provide 'ob-wsdmode)
 ;;; ob-wsdmode.el ends here
