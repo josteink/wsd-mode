@@ -35,7 +35,7 @@ The major-mode provides the following features:
 wsd-mode can be installed as a package, from Marmalade, MELPA and MELPA stable.
 
 Installation from MELPA will be a development snapshot and always be latest version.
-Versions available from Marmalade and MELPA should match, and be more stable versions
+Versions available from Marmalade and MELPA stable should match, and be more stable versions
 released at less frequent intervals.
 
 To install the package, simply start Emacs and issue the following command:
