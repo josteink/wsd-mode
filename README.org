@@ -73,6 +73,17 @@ Briefly, here are the defaults for the variables which can be customized:
 - wsd-style (default modern-blue)
 - wsd-indent-offset (default 4)
 
+*** Org-babel
+
+For usage with org-babel create a ~#+BEGIN_SRC~ block with ~wsd~ as language. Use ~C-c C-c~ to evaluate
+the code and write the diagram to disk, putting it in a ~#+RESULTS:~ block below.
+
+You can optionally use a ~:file~ parameter as argument to use a hard-coded filename instead of having one
+generated for you automatically, on the fly.
+
+When exporting org-document as HTML or similar (~C-e C-c h o~), the ~wsd-mode~ code will not be included
+in the document, but instead the rendered diagram.
+
 ** Planned features
 
 The following features has been considered. They may eventually be

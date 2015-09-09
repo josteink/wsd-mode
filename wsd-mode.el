@@ -57,6 +57,8 @@
 ;;    0.3.0 - Fix compatiblity issues with Emacs 24.3.
 ;;            Improved org-babel support.
 ;;    0.4.0 - integrate with customize framework
+;;    0.4.1 - Bug-fixes & optimizations.
+;;            Support org-babel :file-parameter properly.
 
 ;;; Code:
 
