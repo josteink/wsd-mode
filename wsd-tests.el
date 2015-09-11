@@ -8,6 +8,7 @@
 (require 'ert)
 (require 'wsd-core)
 (require 'wsd-mode)
+(require 'ob-wsdmode)
 
 ;; test-helpers
 
@@ -52,14 +53,14 @@
 
 (ert-deftest indentation-rules-behaves-like-expected ()
   (dolist (test-run '((("alt") . 4)
-		      (("alt" "end") . 0)
-		      (("alt" "end" "alt") . 4)
-		      (("alt" "end" "end") . 0)
-		      (("alt" "end" "end" "alt") . 4)
-		      (("alt" "opt" "end" "opt") . 8)))
+                      (("alt" "end") . 0)
+                      (("alt" "end" "alt") . 4)
+                      (("alt" "end" "end") . 0)
+                      (("alt" "end" "end" "alt") . 4)
+                      (("alt" "opt" "end" "opt") . 8)))
     (let* ((test-data       (car test-run))
-	   (expected-result (cdr test-run))
-	   (actual-result   (wsd-get-indentation-from-keywords test-data)))
+           (expected-result (cdr test-run))
+           (actual-result   (wsd-get-indentation-from-keywords test-data)))
       (should
        (= expected-result actual-result)))))
 
@@ -77,6 +78,44 @@
 
     (should (= 20 (car first-error)))
     (should (equal "Deactivate: User was not activated." (cdr first-error)))))
+
+(ert-deftest line-starters-are-only-fontified-when-actually-starting-a-line ()
+  (let* ((buffer (find-file-read-only "test-files/fontification-tests.wsd")))
+    ;; double-ensure mode is active
+    (wsd-mode)
+    ;; required when running in unit-test runner.
+    (font-lock-fontify-buffer)
+
+    (dolist (item '("title" "participant" "deactivate" "activate"
+                    "alt" "else" "opt" "loop" "end" "note"))
+      ;; (message (concat "Testing '" item "'."))
+      (let* ((buffer1)
+             (buffer2))
+        (goto-char (point-min))
+
+        ;; get reference string
+        (search-forward item)
+        (backward-char) ;; we're AFTER the fontified area
+        (setq buffer1 (thing-at-point 'word))
+        (should (eql
+                 'font-lock-keyword-face
+                 (face-at-point)))
+
+        ;; get verification string
+        (search-forward item)
+        (backward-char) ;; we're AFTER the fontified area
+        (setq buffer2 (thing-at-point 'word))
+
+        ;; verify string equality
+        (should
+         (equal buffer1 buffer2))
+
+        ;; verify different fontification
+        (should (not (eql
+                      'font-lock-keyword-face
+                      (face-at-point))))))
+
+    (kill-buffer buffer)))
 
 ;;(ert-run-tests-interactively t)
 

@@ -1,0 +1,24 @@
+Test-cases
+
+title title title
+
+participant participant participant as p
+
+# comment
+
+alt alt
+
+    activate activate
+    deactivate deactivate
+    
+else else
+
+    note note
+    
+loop loop
+end end
+    
+end end
+
+opt opt
+end end
