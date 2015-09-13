@@ -25,6 +25,7 @@
 ;;; Code:
 
 (require 'ob)
+(require 'wsd-core)
 
 (defvar org-babel-default-header-args:wsd
   '((:results . "file") (:exports . "results"))
