@@ -1,0 +1,15 @@
+* org-document
+
+#+BEGIN_SRC wsd
+title Does work
+#+END_SRC
+
+#+RESULTS:
+[[file:/tmp/wsd-26082suF.svg]]
+
+#+BEGIN_SRC wsd :file test.png
+title Does NOT work
+#+END_SRC
+
+#+RESULTS:
+[[file:test.png]]
