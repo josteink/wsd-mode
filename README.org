@@ -29,7 +29,7 @@ The major-mode provides the following features:
 - inline rendering in Emacs frames when possible, with fallback to OS or
   browser for viewing when critical features are unavailable.
 - ~org-babel~ support (use ~wsd~ as language).
-- limited ~flycheck~ support
+- limited ~flycheck~ support.
 
 ** Installation
 
