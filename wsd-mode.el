@@ -181,7 +181,7 @@
   (make-local-variable 'wsd-indent-offset)
   (set (make-local-variable 'indent-line-function) 'wsd-indent-line)
 
-  (when (fboundp 'flycheck-mode)
+  (when (fboundp 'flycheck-mode-on-safe)
     (flycheck-mode-on-safe)))
 
 (define-key wsd-mode-map (kbd "C-c C-c") #'wsd-show-diagram-inline)
