@@ -152,7 +152,6 @@ Checks weather `BUFFER-NAME' already exists, and if not create as needed."
   (image-type-available-p (intern wsd-format)))
 
 ;; buffer-local state variables
-(defvar wsd-errors nil) ; for flycheck
 (defvar wsd-last-temp-file nil)
 
 (defvar wsd-mode-processing-complete-hook nil
@@ -175,7 +174,6 @@ to the operating-system to open the local copy."
 	 (url     (wsd-get-image-url json))
 	 (errors  (wsd-get-error-lines (wsd-get-errors json))))
     (save-excursion
-      (set (make-local-variable 'wsd-errors) errors)
       (url-copy-file url temp-name t)
 
       ;; only copy to file when in a saved buffer
