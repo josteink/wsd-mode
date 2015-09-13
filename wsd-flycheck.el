@@ -64,7 +64,8 @@
 (ignore-errors
   (require 'flycheck))
 
-(when (fboundp 'flycheck-define-generic-checker)
+(when (and (fboundp 'flycheck-define-generic-checker)
+           (boundp 'flycheck-checkers))
   (flycheck-define-generic-checker 'wsd-mode-checker
     "A syntax-checker for wsd-mode based on the errors reported from the
 wsd-mode website itself."
