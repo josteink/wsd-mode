@@ -25,11 +25,9 @@
 
 ;;; Code:
 
-;; tentatively load flycheck if installed.
-(require 'flycheck)
-
 ;; assign default-values.
-(defvar wsd-flycheck-params nil)
+(defvar wsd-flycheck-checker nil)
+(defvar wsd-flycheck-callback nil)
 
 (defun wsd-flycheck-parse-errors (checker wsd-errors)
   (mapcar (lambda (wsd-error)
@@ -62,15 +60,19 @@
 
 (add-hook 'wsd-mode-processing-complete-hook #'wsd-flycheck-update-errors)
 
-;;;###autoload
-(flycheck-define-generic-checker 'wsd-mode-checker
-  "A syntax-checker for wsd-mode based on the errors reported from the
+;; tentatively load flycheck if installed.
+(ignore-errors
+  (require 'flycheck))
+
+(when (fboundp 'flycheck-define-generic-checker)
+  (flycheck-define-generic-checker 'wsd-mode-checker
+    "A syntax-checker for wsd-mode based on the errors reported from the
 wsd-mode website itself."
 
-  :modes 'wsd-mode
-  :start #'wsd-flycheck-start)
+    :modes 'wsd-mode
+    :start #'wsd-flycheck-start)
 
-(add-to-list 'flycheck-checkers 'wsd-mode-checker)
+  (add-to-list 'flycheck-checkers 'wsd-mode-checker))
 
 (provide 'wsd-flycheck)
 ;;; wsd-flycheck.el ends here
