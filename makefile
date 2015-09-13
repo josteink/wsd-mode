@@ -5,7 +5,7 @@ PACKAGE_DIR:=./.tmp/$(PACKAGE_NAME)
 #PACKAGE_DIR:=/tmp/$(PACKAGE_NAME)
 
 EMACS=$(shell which emacs) -Q -batch -L .
-ELS = wsd-mode.el wsd-core.el
+ELS = wsd-mode.el wsd-core.el ob-wsdmode.el wsd-flycheck.el
 ELCS = $(ELS:.el=.elc)
 
 package: $(PACKAGE_DIR)
