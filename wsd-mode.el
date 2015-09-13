@@ -3,7 +3,7 @@
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
 ;; Created    : December 2014
 ;; Modified   : September 2015
-;; Version    : 0.4.1
+;; Version    : 0.4.2
 ;; Keywords   : wsd diagrams design process modelling uml
 ;; X-URL      : https://github.com/josteink/wsd-mode
 ;;
@@ -59,6 +59,7 @@
 ;;    0.4.0 - integrate with customize framework
 ;;    0.4.1 - Bug-fixes & optimizations.
 ;;            Support org-babel :file-parameter properly.
+;;    0.4.2 - Limited flycheck support.
 
 ;;; Code:
 

@@ -29,6 +29,7 @@ The major-mode provides the following features:
 - inline rendering in Emacs frames when possible, with fallback to OS or
   browser for viewing when critical features are unavailable.
 - ~org-babel~ support (use ~wsd~ as language).
+- limited ~flycheck~ support
 
 ** Installation
 
@@ -84,12 +85,23 @@ generated for you automatically, on the fly.
 When exporting org-document as HTML or similar (~C-e C-c h o~), the ~wsd-mode~ code will not be included
 in the document, but instead the rendered diagram.
 
+
+*** Flycheck
+
+~wsd-mode~ has limited support for ~flycheck~. While flycheck in general does
+all the checking as you type, providing you with real-time feedback,
+~wsd-mode~ only updates the error-list upon script-compilation.
+
+This means that using flycheck should incur no extra processing cost, and
+therefore, if flycheck is installed, it will also be activated automatically whenever
+~wsd-mode~ is.
+
+This is due to implementation and may be subject to change in the future.
+
 ** Planned features
 
 The following features has been considered. They may eventually be
 implemented:
 
-- in-buffer highlighting of errors.
-- flymake/flycheck integration?
 - auto-insert-mode integration?
 - websequencediagram.com account-integration?
