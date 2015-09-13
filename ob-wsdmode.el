@@ -25,6 +25,7 @@
 ;;; Code:
 
 (require 'ob)
+(require 'wsd-core)
 
 (defvar org-babel-default-header-args:wsd
   '((:results . "file") (:exports . "results"))
@@ -36,8 +37,7 @@
 (defun org-babel-execute:wsd (body params)
   "Execute a block of wsd-mode code with org-babel.
 This function is called by `org-babel-execute-src-block'."
-  (let* ((result-params (split-string (or (cdr (assoc :results params)) "")))
-         (out-file (cdr (assoc :file params)))
+  (let* ((out-file (cdr (assoc :file params)))
          (img-file (if out-file
                        out-file
                      (wsd-get-temp-filename)))

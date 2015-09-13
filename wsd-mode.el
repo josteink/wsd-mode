@@ -3,7 +3,7 @@
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
 ;; Created    : December 2014
 ;; Modified   : September 2015
-;; Version    : 0.4.1
+;; Version    : 0.4.2
 ;; Keywords   : wsd diagrams design process modelling uml
 ;; X-URL      : https://github.com/josteink/wsd-mode
 ;;
@@ -59,6 +59,7 @@
 ;;    0.4.0 - integrate with customize framework
 ;;    0.4.1 - Bug-fixes & optimizations.
 ;;            Support org-babel :file-parameter properly.
+;;    0.4.2 - Limited flycheck support.
 
 ;;; Code:
 
@@ -179,16 +180,23 @@
                                       (cons rx-operators 'font-lock-comment-face))))
 
   (make-local-variable 'wsd-indent-offset)
-  (set (make-local-variable 'indent-line-function) 'wsd-indent-line))
+  (set (make-local-variable 'indent-line-function) 'wsd-indent-line)
+
+  (when (fboundp 'flycheck-mode-on-safe)
+    (flycheck-mode-on-safe)))
 
 (define-key wsd-mode-map (kbd "C-c C-c") #'wsd-show-diagram-inline)
 (define-key wsd-mode-map (kbd "C-c C-e") #'wsd-show-diagram-online)
-(define-key wsd-mode-map (kbd "C-c C-k") #'wsd-strip-errors)
+;; (define-key wsd-mode-map (kbd "C-c C-k") #'wsd-strip-errors)
 
 
 ;;; Autoload mode trigger
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.wsd$" . wsd-mode))
+
+;; Flycheck support must be loaded after other code has been intialized.
+(ignore-errors
+  (require 'wsd-flycheck))
 
 (provide 'wsd-mode)
 
