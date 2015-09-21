@@ -85,6 +85,7 @@ generated for you automatically, on the fly.
 When exporting org-document as HTML or similar (~C-e C-c h o~), the ~wsd-mode~ code will not be included
 in the document, but instead the rendered diagram.
 
+See the [[demo.org]]-file for a concrete example.
 
 *** Flycheck
 
