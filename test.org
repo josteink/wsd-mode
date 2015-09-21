@@ -1,15 +1,65 @@
-* org-document
+* Demo org-mode org-babel document.
+
+This document shows you how to use ~wsd-mode~ with ~org-babel~.
+
+** Basic source-code blocks.
+
+You need to declare a source-code block, and use ~wsd~ as language.
 
 #+BEGIN_SRC wsd
-title Does work
+  title Does work
+
+  participant User as u
+  participant Server as s
+
+  u->+s: Gimme something
+  s-->-u: HTMLz
 #+END_SRC
 
-#+RESULTS:
-[[file:/tmp/wsd-26082suF.svg]]
+If you press ~C-c C-c~ while the cursor is over the source-code block,
+you will be asked if executing the code is OK. If you answer yes, you
+should see a ~#+RESULT~ block pop up below the source-code block with
+a link to the generated file.
+
+The file-name will be chosen at random,
+using the file-format defined in the ~wsd-format~ variable.
+
+** Parameters and tweaks.
+
+If you want to use a specific file-name for the output, you can do so
+by providing a ~:file~ parameter as in the example below.
 
 #+BEGIN_SRC wsd :file test.png
-title Does NOT work
+  title Does also work
+
+  participant User as u
+  participant Server as s
+
+  u->+s: Gimme something specific
+  s-->-u: HTMLz
 #+END_SRC
 
-#+RESULTS:
-[[file:test.png]]
+Execute the code above and inspect the result-block. Note that your
+supplied filename has been used!
+
+If you find these warnings annoying you can add the following to your
+~init.el~:
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+** Generating output-documents
+
+~org-babel~ supports exporting documents. When exporting documents
+containing ~wsd-mode~ code-blocks, they will be rendered as part of
+the export, and their contents will be replaced by the rendered images
+instead.
+
+This is probably what you want.
+
+To try export, press ~C-c C-e~ or ~M-x org-export-dispatch~. Then
+press ~h o~ (HTML-file, open after export).
+
+Behold your wonderful HTML document, with inline ~wsd-mode~diagrams,
+all created from inside Emacs!
