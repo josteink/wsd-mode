@@ -105,7 +105,7 @@
       (downcase thing))))
 
 ;; else not included as it doesnt affect the -overall- indentation either way
-(defconst wsd-indentation-keywords '("alt" "opt" "loop" "end"))
+(defconst wsd-indentation-keywords '("alt" "opt" "loop" "state" "end"))
 
 (defun wsd-is-indentation-keyword (word)
   "Return true if `WORD' should cause indentation-changes."
@@ -132,7 +132,7 @@
 (defun wsd-get-indentation-from-keywords (keywords)
   "Get the overall indentation from the supplied `KEYWORDS'."
   (let* ((indent-col   0)
-         (indent-plus  '("alt" "opt" "loop"))
+         (indent-plus  '("alt" "opt" "loop" "state"))
          (indent-minus '("end")))
     (dolist (keyword keywords)
       (when (member keyword indent-plus)
@@ -144,7 +144,7 @@
 
 (defun wsd-get-adjustment-indent ()
   "Adjust overall document indentation with specific reverse compensation for branch-starting keywords based on the current line."
-  (if (wsd-line-starts-with '("alt" "opt" "else"))
+  (if (wsd-line-starts-with '("alt" "opt" "else" "state"))
       (- 0 wsd-indent-offset)
     0))
 
@@ -160,7 +160,7 @@
   "Major-mode for websequencediagrams.com"
   (let* (;; some keywords should only trigger when starting a line.
          (line-starters '("title" "participant" "deactivate" "activate"
-                          "alt" "else" "opt" "loop" "end" "note"))
+                          "alt" "else" "opt" "loop" "state" "end" "note"))
          ;; combine into one big OR regexp, ^<> start of line, whole word only.
          (rx-line-starters (concat "^[[:space:]]*\\<" (regexp-opt line-starters t) "\\>"))
 
