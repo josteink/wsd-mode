@@ -60,8 +60,8 @@
 ;;    0.4.1 - Bug-fixes & optimizations.
 ;;          - Support org-babel :file-parameter properly.
 ;;          - Limited flycheck support.
-;;          - Improved fontication for additional keywords (autonumber, destroy)
-;;            and syntax (*-activation)
+;;          - Improved fontication for additional keywords (autonumber, destroy,
+;;            option footer) and syntax (*-activation).
 ;;          - Support for some pro-only features.
 
 
