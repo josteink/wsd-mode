@@ -160,7 +160,8 @@
   "Major-mode for websequencediagrams.com"
   (let* (;; some keywords should only trigger when starting a line.
          (line-starters '("title" "participant" "deactivate" "activate"
-                          "alt" "else" "opt" "loop" "state" "end" "note"))
+                          "alt" "else" "opt" "loop" "state" "end" "note"
+                          "autonumber"))
          ;; combine into one big OR regexp, ^<> start of line, whole word only.
          (rx-line-starters (concat "^[[:space:]]*\\<" (regexp-opt line-starters t) "\\>"))
 
