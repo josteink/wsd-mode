@@ -60,6 +60,9 @@
 ;;    0.4.1 - Bug-fixes & optimizations.
 ;;            Support org-babel :file-parameter properly.
 ;;    0.4.2 - Limited flycheck support.
+;;    0.4.3 - Support for new keywords (autonumber, destroy)
+;;          - Support for some pro-only features.
+
 
 ;;; Code:
 
@@ -161,7 +164,7 @@
   (let* (;; some keywords should only trigger when starting a line.
          (line-starters '("title" "participant" "deactivate" "activate"
                           "alt" "else" "opt" "loop" "state" "end" "note"
-                          "autonumber"))
+                          "autonumber" "destroy"))
          ;; combine into one big OR regexp, ^<> start of line, whole word only.
          (rx-line-starters (concat "^[[:space:]]*\\<" (regexp-opt line-starters t) "\\>"))
 
