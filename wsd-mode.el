@@ -176,7 +176,7 @@
          (rx-comments "#.*$")
 
          ;; operators
-         (operators '("-->-" "-->" "->+" "->-" "->" ": "))
+         (operators '("-->-" "-->" "->+" "->*" "->-" "->" ": "))
          (rx-operators (regexp-opt operators t)))
     (font-lock-add-keywords nil (list (cons rx-keywords 'font-lock-keyword-face)
                                       (cons rx-line-starters 'font-lock-keyword-face)
