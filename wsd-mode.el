@@ -165,7 +165,7 @@
   (let* (;; some keywords should only trigger when starting a line.
          (line-starters '("title" "participant" "deactivate" "activate"
                           "alt" "else" "opt" "loop" "state" "end" "note"
-                          "autonumber" "destroy"))
+                          "autonumber" "destroy" "option footer"))
          ;; combine into one big OR regexp, ^<> start of line, whole word only.
          (rx-line-starters (concat "^[[:space:]]*\\<" (regexp-opt line-starters t) "\\>"))
 
