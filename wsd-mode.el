@@ -170,7 +170,7 @@
          (rx-line-starters (concat "^[[:space:]]*\\<" (regexp-opt line-starters t) "\\>"))
 
          ;; some keywords are OK almost anywhere, or at least treat them as such.
-         (keywords '("over" "right" "left" "of" "as"))
+         (keywords '("over" "right of" "left of" "as"))
          (rx-keywords (concat "\\<" (regexp-opt keywords t) "\\>"))
 
          ;; lines starting with # are treated as comments
