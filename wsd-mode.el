@@ -3,7 +3,7 @@
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
 ;; Created    : December 2014
 ;; Modified   : September 2015
-;; Version    : 0.4.2
+;; Version    : 0.4.1
 ;; Keywords   : wsd diagrams design process modelling uml
 ;; X-URL      : https://github.com/josteink/wsd-mode
 ;;
@@ -58,9 +58,10 @@
 ;;            Improved org-babel support.
 ;;    0.4.0 - integrate with customize framework
 ;;    0.4.1 - Bug-fixes & optimizations.
-;;            Support org-babel :file-parameter properly.
-;;    0.4.2 - Limited flycheck support.
-;;    0.4.3 - Support for new keywords (autonumber, destroy)
+;;          - Support org-babel :file-parameter properly.
+;;          - Limited flycheck support.
+;;          - Improved fontication for additional keywords (autonumber, destroy)
+;;            and syntax (*-activation)
 ;;          - Support for some pro-only features.
 
 
