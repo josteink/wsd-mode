@@ -79,99 +79,146 @@
   :type 'integer
   :group 'wsd-mode)
 
-(defun wsd-any (predicate list)
-  "Check if `PREDICATE' yields true for any item in `LIST'."
-  (let* ((result nil))
-    (dolist (item list)
-      (setq result (or result
-                       (funcall predicate item))))
-    result))
+;; regex construction helper functions
 
-(defun wsd-line-starts-with (keywords)
-  (beginning-of-line-text)
-  (let* ((word       (thing-at-point 'word t)))
-    (if (equal nil word)
+(defun wsd-single-p (ls)
+  "Check if `LS' contain one item only."
+  (and ls
+       (null (cdr ls))))
+
+(defun wsd-list-intersperse (seperator ls)
+  "Intersperse `SEPERATOR' in between all items in `LS'."
+  (if (or (null ls)
+          (wsd-single-p ls))
+      ;; when zero or one elements, onlt return remaining list
+      (car ls)
+    ;; otherwise intersperse an item and recurse.
+    (concat (car ls) seperator (wsd-list-intersperse seperator (cdr ls)))))
+
+(defun wsd-rx-or (&rest regexps)
+  "Combine `REGEXPS' into a regexp representing them all in a logical or."
+
+  (cond
+   ;; nothing sent in, return empty string.
+   ((null regexps)
+    "")
+   ;; param is list of list(s). reformat and recurse.
+   ((listp (car regexps))
+    (apply #'wsd-rx-or (car regexps)))
+   ;; all else
+   (t
+    (concat "\\(" (wsd-list-intersperse "\\|" regexps) "\\)"))))
+
+(defun wsd-rx-word (rx)
+  "Wrap `RX' in a word-only container."
+  (concat "\\<" rx "\\>"))
+
+(defun wsd-rx-lstart (rx)
+  "Prefix `RX' with a line-start clause."
+  (concat "^[[:space:]]*" rx))
+
+;; indentation code
+
+(defun wsd-get-current-line ()
+  "Return the content of the current line in the buffer.
+
+   Handles nullability and down-casing."
+  ;; includes trailing newline, but that shouldn't be an issue.
+  (let* ((thing (thing-at-point 'line t)))
+    (if (equal nil thing)
         nil
-      (wsd-any `(lambda (x) (equal ,(downcase word) x)) keywords))))
+      (downcase thing))))
+
+(defun wsd-get-buffer-lines ()
+  "Return the list of lines found from the current point in the buffer, back to the start."
+  (interactive)
+
+  (save-excursion
+    (beginning-of-line)
+
+    (let* ((lines '()))
+      (while (not (equal (point) (point-min)))
+        (beginning-of-line-text)
+        (let* ((line (wsd-get-current-line)))
+          (setq lines (cons line lines)))
+        (beginning-of-line)
+        (forward-line -1))
+      lines)))
+
+;; else not included as +-word as qit doesnt affect the -overall- indentation either way
+(defconst wsd-rx-indentation-plus
+  (wsd-rx-lstart
+   (wsd-rx-or
+    (wsd-rx-word (wsd-rx-or "alt" "opt" "loop"))
+    ;; the following keywords only indent when not followed by colon:
+    (concat (wsd-rx-word (wsd-rx-or "state" "note")) "[^:]*$")
+    (concat "parallel[[:space:]]+{"))))
+
+(defconst wsd-rx-indentation-minus
+  (wsd-rx-lstart
+   (wsd-rx-or
+    (wsd-rx-word "end")
+    "}")))
+
+(defun wsd-get-indentation-from-line (line)
+  "Get the indentation for the single supplied `LINE'."
+  (cond
+   ((string-match-p wsd-rx-indentation-plus line)  wsd-indent-offset)
+   ((string-match-p wsd-rx-indentation-minus line) (- 0 wsd-indent-offset))
+   (t 0)))
+
+(defun wsd-calculate-indentation-level (current adjustment)
+  "Calculate new indentation level based on `CURRENT' and `ADJUSTMENT'."
+  (let* ((adjusted (+ current adjustment)))
+    (if (> 0 adjusted)
+        0
+      adjusted)))
+
+(defun wsd-get-indentation-from-lines (lines)
+  "Get the overall indentation from the supplied `LINES'."
+  (let* ((indent-col   0))
+    (dolist (line lines)
+      (setq indent-col (wsd-calculate-indentation-level
+                        indent-col
+                        (wsd-get-indentation-from-line line))))
+    indent-col))
+
+(defun wsd-get-adjustment-indent ()
+  "Adjust overall document indentation with specific reverse compensation for branch-starting keywords based on the current line."
+  (if (string-match-p
+       (wsd-rx-or (wsd-rx-lstart (wsd-rx-word "else"))
+                  wsd-rx-indentation-plus)
+       (wsd-get-current-line))
+      (- 0 wsd-indent-offset)
+    0))
+
+(defun wsd-get-line-indent ()
+  "Get the indentation level of the current line."
+  (let* ((lines             (wsd-get-buffer-lines))
+         (lines-indent      (wsd-get-indentation-from-lines lines))
+         (adjustment-indent (wsd-get-adjustment-indent)))
+    (wsd-calculate-indentation-level lines-indent adjustment-indent)))
 
 (defun wsd-indent-line ()
   "Indent current line for `wsd-mode'."
   (interactive)
   (indent-line-to (wsd-get-line-indent)))
 
-(defun wsd-get-string-at-point ()
-  "Return the string at the current point.
-
-   Handles nullability and down-casing."
-  (let* ((thing (thing-at-point 'word t)))
-    (if (equal nil thing)
-        nil
-      (downcase thing))))
-
-;; else not included as it doesnt affect the -overall- indentation either way
-(defconst wsd-indentation-keywords '("alt" "opt" "loop" "state" "end"))
-
-(defun wsd-is-indentation-keyword (word)
-  "Return true if `WORD' should cause indentation-changes."
-  (and (not (equal nil word))
-       (member word wsd-indentation-keywords)))
-
-(defun wsd-get-buffer-indentation-keywords ()
-  "Return the list of indentation-keywords found from the current point in the buffer, back to the start."
-  (interactive)
-
-  (save-excursion
-    (beginning-of-line)
-
-    (let* ((words '()))
-      (while (not (equal (point) (point-min)))
-        (beginning-of-line-text)
-        (let* ((word (wsd-get-string-at-point)))
-          (when (wsd-is-indentation-keyword word)
-            (setq words (cons word words))))
-        (beginning-of-line)
-        (forward-line -1))
-      words)))
-
-(defun wsd-get-indentation-from-keywords (keywords)
-  "Get the overall indentation from the supplied `KEYWORDS'."
-  (let* ((indent-col   0)
-         (indent-plus  '("alt" "opt" "loop" "state"))
-         (indent-minus '("end")))
-    (dolist (keyword keywords)
-      (when (member keyword indent-plus)
-        (setq indent-col (+ indent-col wsd-indent-offset)))
-      (when (member keyword indent-minus)
-        (setq indent-col (- indent-col wsd-indent-offset)))
-      (setq indent-col (max 0 indent-col)))
-    indent-col))
-
-(defun wsd-get-adjustment-indent ()
-  "Adjust overall document indentation with specific reverse compensation for branch-starting keywords based on the current line."
-  (if (wsd-line-starts-with '("alt" "opt" "else" "state"))
-      (- 0 wsd-indent-offset)
-    0))
-
-(defun wsd-get-line-indent ()
-  "Get the indentation level of the current line."
-  (let* ((keywords          (wsd-get-buffer-indentation-keywords))
-         (keyword-indent    (wsd-get-indentation-from-keywords keywords))
-         (adjustment-indent (wsd-get-adjustment-indent)))
-    (+ keyword-indent adjustment-indent)))
-
 ;;;###autoload
 (define-derived-mode wsd-mode fundamental-mode "wsd-mode"
   "Major-mode for websequencediagrams.com"
   (let* (;; some keywords should only trigger when starting a line.
          (line-starters '("title" "participant" "deactivate" "activate"
-                          "alt" "else" "opt" "loop" "state" "end" "note"
-                          "autonumber" "destroy" "option footer"))
+                          "alt" "else" "opt" "loop" "state" "note"
+                          "end" "end state" "end note"
+                          "autonumber" "destroy" "option footer"
+                          "parallel"))
          ;; combine into one big OR regexp, ^<> start of line, whole word only.
-         (rx-line-starters (concat "^[[:space:]]*\\<" (regexp-opt line-starters t) "\\>"))
+         (rx-line-starters (wsd-rx-lstart (wsd-rx-word (wsd-rx-or line-starters))))
 
          ;; some keywords are OK almost anywhere, or at least treat them as such.
          (keywords '("over" "right of" "left of" "as"))
-         (rx-keywords (concat "\\<" (regexp-opt keywords t) "\\>"))
+         (rx-keywords (wsd-rx-word (wsd-rx-or keywords)))
 
          ;; lines starting with # are treated as comments
          (rx-comments "#.*$")

@@ -23,6 +23,11 @@
                              str2 begin2 end2
                              ignore-case)))))
 
+(defun wsd-test-indent-all ()
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil)
+  (untabify (point-min) (point-max)))
+
 (setq file-names '("lalalala" "test.txt" "test.wsd" "test.a.wsd"))
 
 (ert-deftest local-filename-is-never-nil ()
@@ -60,11 +65,15 @@
                       (("alt" "end" "end") . 0)
                       (("alt" "end" "end" "alt") . 4)
                       (("alt" "opt" "end" "opt") . 8)
-                      (("alt" "state" "end") . 4)
+                      (("alt" "state over foo: " "end") . 0)
+                      (("alt" "state over bar") . 8)
+                      (("alt" "note over foo: " "end") . 0)
+                      (("alt" "note over bar") . 8)
+                      (("alt" "state" "end state") . 4)
                       (("alt" "state" "end" "end") . 0)))
     (let* ((test-data       (car test-run))
            (expected-result (cdr test-run))
-           (actual-result   (wsd-get-indentation-from-keywords test-data)))
+           (actual-result   (wsd-get-indentation-from-lines test-data)))
       (should
        (= expected-result actual-result)))))
 
@@ -118,6 +127,19 @@
         (should (not (eql
                       'font-lock-keyword-face
                       (face-at-point))))))
+
+    (kill-buffer buffer)))
+
+(ert-deftest indentation-reference-document-is-reflowed-correctly ()
+  (let* ((buffer (find-file "test-files/indentation-tests.wsd")))
+    ;; double ensure mode is active
+    (wsd-mode)
+
+    (setq wsd-test-reference (buffer-substring-no-properties (point-min) (point-max)))
+    (wsd-test-indent-all)
+    (setq wsd-test-reflowed  (buffer-substring-no-properties (point-min) (point-max)))
+
+    (should (equal wsd-test-reference wsd-test-reflowed))
 
     (kill-buffer buffer)))
 

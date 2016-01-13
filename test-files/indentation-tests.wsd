@@ -1,0 +1,67 @@
+Test-cases
+
+# TODO: write unit-test which loads and verifies the indentation of this reference document!
+
+title title title
+
+participant participant 1 as p1
+participant participant 2 as p2
+participant participant 3 as p3
+
+# comment
+
+alt alt
+
+    activate activate
+    deactivate deactivate
+
+else else
+
+    state over p1: single line statement
+    state over p2
+        multiline statement
+        which spans lines
+    end state
+
+    note over p1: single line statement
+    note over p2
+        multiline statement
+        which also spans lines
+    end state
+
+end
+
+opt pro-features all night long
+    parallel {
+        p1->p2: test
+        note over p1
+            this is a test!
+        end note
+
+        note over p2: this is just slick
+        p2->p3: test
+    }
+end
+
+# extra end to try force indentation into minus
+end
+
+alt end-test
+    note over p: but this should indent anyway
+end
+
+alt test
+
+    loop boo
+        p1->p2: So what
+    end
+
+
+    loop loop
+        p2->p1: Indeed
+    end end
+
+end end
+
+opt opt
+end end
