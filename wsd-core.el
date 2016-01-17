@@ -104,7 +104,7 @@ Delimiters included.  If no api-key is used, returns nil."
     (goto-char (point-min))
     (search-forward-regexp "Line \\([[:digit:]]+\\): \\(.*\\)")
     (let* ((line-num          (string-to-number (match-string 1)))
-	   (error-description (match-string 2)))
+           (error-description (match-string 2)))
       (cons line-num error-description))))
 
 (defun wsd-get-error-lines (error-list)
@@ -166,40 +166,40 @@ to the operating-system to open the local copy."
   (interactive)
   (let* ((orig-buffer (buffer-name))
          (buffer-name (buffer-file-name))
-	 (temp-name   (wsd-get-temp-filename))
-	 ;; only required for saved buffers.
+         (temp-name   (wsd-get-temp-filename))
+         ;; only required for saved buffers.
          (file-name   (wsd-get-image-filename buffer-name))
-	 (message (buffer-substring-no-properties (point-min) (point-max)))
-	 (json    (wsd-get-json message))
-	 (url     (wsd-get-image-url json))
-	 (errors  (wsd-get-error-lines (wsd-get-errors json))))
+         (message (buffer-substring-no-properties (point-min) (point-max)))
+         (json    (wsd-get-json message))
+         (url     (wsd-get-image-url json))
+         (errors  (wsd-get-error-lines (wsd-get-errors json))))
     (save-excursion
       (url-copy-file url temp-name t)
 
       ;; only copy to file when in a saved buffer
       (when file-name
-	(copy-file temp-name file-name t t t)))
+        (copy-file temp-name file-name t t t)))
 
     (when wsd-mode-processing-complete-hook
       (run-hook-with-args 'wsd-mode-processing-complete-hook errors))
-    
+
     (if (display-graphic-p)
-	(if (wsd-image-format-supported-p)
-	    (let* ((image-buffer-name (wsd-get-image-buffer-name buffer-name file-name))
-		   (buffer-exists     (get-buffer image-buffer-name)))
-	      ;; display image from temp-area because of bug in OSX Emacs.
-	      ;; https://github.com/josteink/wsd-mode/issues/11
-	      (wsd-display-image-inline image-buffer-name temp-name)
-	      (switch-to-buffer orig-buffer)
-	      (when (not buffer-exists)
-		(switch-to-buffer-other-window image-buffer-name))
+        (if (wsd-image-format-supported-p)
+            (let* ((image-buffer-name (wsd-get-image-buffer-name buffer-name file-name))
+                   (buffer-exists     (get-buffer image-buffer-name)))
+              ;; display image from temp-area because of bug in OSX Emacs.
+              ;; https://github.com/josteink/wsd-mode/issues/11
+              (wsd-display-image-inline image-buffer-name temp-name)
+              (switch-to-buffer orig-buffer)
+              (when (not buffer-exists)
+                (switch-to-buffer-other-window image-buffer-name))
 
-	      ;; avoid ending up with a flurry of temp-files.
-	      (when wsd-last-temp-file
-		(delete-file wsd-last-temp-file))
+              ;; avoid ending up with a flurry of temp-files.
+              (when wsd-last-temp-file
+                (delete-file wsd-last-temp-file))
 
-	      (set (make-local-variable 'wsd-last-temp-file) temp-name))
-	  (wsd-browse-url temp-name))
+              (set (make-local-variable 'wsd-last-temp-file) temp-name))
+          (wsd-browse-url temp-name))
       (message url))))
 
 (defun wsd-browse-url (url)
@@ -221,8 +221,10 @@ to the operating-system to open the local copy."
   "Show the current buffer on www.websequencediagrams.com."
   (interactive)
   (let* ((message      (buffer-substring-no-properties (point-min) (point-max)))
-	 (encoded      (wsd-encode message))
-	 (url          (concat wsd-base-url "?m=" encoded)))
+         (encoded      (wsd-encode message))
+         ;; otherwise comments in script will break export!
+         (escaped      (replace-regexp-in-string "#" "%23" encoded))
+         (url          (concat wsd-base-url "?m=" escaped)))
     (browse-url url)))
 
 (provide 'wsd-core)
