@@ -12,13 +12,24 @@ alt alt
     deactivate deactivate
     
 else else
-
-    note note
     
-loop loop
-end end
+    note note
+    end end
+
+    state state
+    end end
+
+    ref ref
+    end ref
+    
+    loop loop
+    end end
+
+    parallel parallel
     
 end end
 
 opt opt
 end end
+    
+ref ref 

@@ -100,7 +100,8 @@
     (font-lock-fontify-buffer)
 
     (dolist (item '("title" "participant" "deactivate" "activate"
-                    "alt" "else" "opt" "loop" "end" "note"))
+                    "alt" "else" "opt" "loop" "end" "note"
+                    "state" "ref" "parallel"))
       ;; (message (concat "Testing '" item "'."))
       (let* ((buffer1)
              (buffer2))

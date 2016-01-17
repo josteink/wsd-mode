@@ -152,7 +152,7 @@
    (wsd-rx-or
     (wsd-rx-word (wsd-rx-or "alt" "opt" "loop"))
     ;; the following keywords only indent when not followed by colon:
-    (concat (wsd-rx-word (wsd-rx-or "state" "note")) "[^:]*$")
+    (concat (wsd-rx-word (wsd-rx-or "state" "note" "ref")) "[^:]*$")
     (concat "parallel[[:space:]]+{"))))
 
 (defconst wsd-rx-indentation-minus
@@ -211,9 +211,9 @@
   (let* (;; some keywords should only trigger when starting a line.
          (line-starters '("title" "participant" "deactivate" "activate"
                           "alt" "else" "opt" "loop" "state" "note"
-                          "end" "end state" "end note"
+                          "end" "end state" "end note" "end ref"
                           "autonumber" "destroy" "option footer"
-                          "parallel"))
+                          "parallel" "ref"))
          ;; combine into one big OR regexp, ^<> start of line, whole word only.
          (rx-line-starters (wsd-rx-lstart (wsd-rx-word (wsd-rx-or line-starters))))
 

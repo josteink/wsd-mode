@@ -65,3 +65,12 @@ end end
 
 opt opt
 end end
+
+# ref keyword also exists
+
+ref over p1: Single line statement
+
+ref over p1
+    Multi-line statement which
+    actually spans lines.
+end ref
