@@ -124,7 +124,8 @@
 
    Handles nullability and down-casing."
   ;; includes trailing newline, but that shouldn't be an issue.
-  (let* ((thing (thing-at-point 'line t)))
+  ;; omit the second param t, because that breaks on Emacs <= 24.3.
+  (let* ((thing (thing-at-point 'line)))
     (if (equal nil thing)
         nil
       (downcase thing))))
