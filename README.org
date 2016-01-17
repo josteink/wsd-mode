@@ -22,7 +22,8 @@ feel free to read along.
 
 The major-mode provides the following features:
 
-- proper syntax highlighting for all WSD syntax.
+- proper syntax highlighting for all standard WSD syntax. Almost
+  feature complete syntax for pro-only features (see [[https://github.com/josteink/wsd-mode/issues][issues]])
 - indentation based on nested constructs and alternative paths.
 - supports running Emacs in GUI and the terminal.
 - auto-generating diagrams based on source.
