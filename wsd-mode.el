@@ -211,9 +211,12 @@
   (interactive)
   (indent-line-to (wsd-get-line-indent)))
 
-;;;###autoload
-(define-derived-mode wsd-mode fundamental-mode "wsd-mode"
-  "Major-mode for websequencediagrams.com"
+
+;;;; FONTIFICATION LEVELS
+
+;; LEVEL 1 - keywords
+
+(defconst wsd-font-lock-keywords-1
   (let* (;; some keywords should only trigger when starting a line.
          (line-starters '("title" "participant" "deactivate" "activate"
                           "alt" "else" "opt" "loop" "state" "note"
@@ -227,14 +230,70 @@
 
          ;; some keywords are OK almost anywhere, or at least treat them as such.
          (keywords '("over" "right of" "left of" "as"))
-         (rx-keywords (wsd-rx-word (wsd-rx-or keywords)))
+         (rx-keywords (wsd-rx-word (wsd-rx-or keywords))))
+    (list
+     (cons rx-line-starters 'font-lock-keyword-face)
+     (cons rx-keywords 'font-lock-keyword-face))))
 
-         ;; operators
-         (operators '("-->-" "-->" "->+" "->*" "->-" "->" ": "))
-         (rx-operators (regexp-opt operators t)))
-    (font-lock-add-keywords nil (list (cons rx-keywords 'font-lock-keyword-face)
-                                      (cons rx-line-starters 'font-lock-keyword-face)
-                                      (cons rx-operators 'font-lock-comment-face))))
+;; used on level 3 for variables
+(defconst wsd-operators3 '("-->-" "-->" "->+" "->*" "->-" "->"))
+;; used on level 2 for actual operator
+(defconst wsd-operators2 (cons ": " wsd-operators3))
+
+;; LEVEL 2 - operators
+
+(defconst wsd-font-lock-keywords-2
+  (append wsd-font-lock-keywords-1
+          (let* (;; operators
+                 (rx-operators (regexp-opt wsd-operators2 t)))
+            (list
+             (cons rx-operators 'font-lock-comment-face)))))
+
+;; LEVEL 3 - variables/actors
+
+(defconst wsd-font-lock-keywords-3
+  (append wsd-font-lock-keywords-2
+          (let* (;; actors in participants statements
+                 (rx-participants (wsd-rx-lstart (concat (wsd-rx-word "participant")
+                                                         "\\(.+\\)"
+                                                         (wsd-rx-word "as")
+                                                         "\\(.+\\)$")))
+
+                 ;; actors in activity staements
+                 (rx-actors (wsd-rx-lstart (concat "\\([^\n-]+\\)"
+                                                   (regexp-opt wsd-operators3 t)
+                                                   "\\(.+\\)"
+                                                   ":.*$")))
+
+                 ;; actors in activate/deactivate/destroy statements
+                 (rx-actors-keywords (wsd-rx-lstart (concat (wsd-rx-or "activate"
+                                                                       "deactivate"
+                                                                       "destroy")
+                                                            "\\(.*\\)$")))
+
+                 ;; actors in note over/right of/etc scenarios
+                 ;; some keywords are OK almost anywhere, or at least treat them as such.
+                 (keywords '("over" "right of" "left of" "as"))
+                 (rx-keywords (wsd-rx-word (wsd-rx-or keywords)))
+                 (rx-actors-positional (concat rx-keywords "\\([^:]+\\)$")))
+            (list
+             (list rx-participants 1 'font-lock-variable-name-face)
+             (list rx-participants 2 'font-lock-variable-name-face)
+             (list rx-actors 1 'font-lock-variable-name-face)
+             (list rx-actors 3 'font-lock-variable-name-face)
+             (list rx-actors-keywords 2 'font-lock-variable-name-face)
+             (list rx-actors-positional 2 'font-lock-variable-name-face)))))
+
+
+;; apply default fontification-setting
+(defvar wsd-font-lock-keywords wsd-font-lock-keywords-3)
+
+;;;###autoload
+(define-derived-mode wsd-mode fundamental-mode "wsd-mode"
+  "Major-mode for websequencediagrams.com"
+
+  ;; set fontification rules according to user-preferences
+  (set (make-local-variable 'font-lock-defaults) (list wsd-font-lock-keywords))
 
   ;; create syntax-table.
   ;; this is required for things like company-mode to complete at correct point

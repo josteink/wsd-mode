@@ -18,7 +18,7 @@ opt Authentication
 
     alt Has password
 
-        u->+b: Password
+        u->*b: Password
         b->s: Hash
         deactivate b
 
@@ -39,3 +39,13 @@ end
 
 s-->-b: HTMLz
 b-->-u: Webz
+
+# the following statements are only meant to
+# interactively test fontification
+
+destroy destroy
+activate activate
+deactivate deactivate
+
+note over non-fontified actor
+end note
