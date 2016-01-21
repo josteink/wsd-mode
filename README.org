@@ -102,6 +102,17 @@ therefore, if flycheck is installed, it will also be activated automatically whe
 
 This is due to implementation and may be subject to change in the future.
 
+*** company-mode
+
+~wsd-mode~ supports company-mode completion. Enable it the way you
+usually enable it in your init.el:
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'wsd-mode-hook 'company-mode)
+#+END_SRC
+
+Currently completion on keywords and participants is supported.
+
 ** Planned features
 
 The following features has been considered. They may eventually be
