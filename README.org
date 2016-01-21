@@ -31,6 +31,7 @@ The major-mode provides the following features:
   browser for viewing when critical features are unavailable.
 - ~org-babel~ support (use ~wsd~ as language).
 - limited ~flycheck~ support.
+- limited ~company-mode~ support.
 
 ** Installation
 

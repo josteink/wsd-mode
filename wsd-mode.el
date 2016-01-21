@@ -65,6 +65,7 @@
 ;;          - Support for some pro-only features.
 ;;    0.4.3 - Improved syntax-support for pro-only features
 ;;            (almost feature complete).
+;;          - Basic company-mode completion.
 
 
 ;;; Code:
