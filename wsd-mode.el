@@ -74,6 +74,9 @@
 (ignore-errors
   (require 'ob-wsdmode))
 
+(ignore-errors
+  (require 'company-wsdmode))
+
 ;; notes about derived mode here: http://www.emacswiki.org/emacs/DerivedMode
 
 (defcustom wsd-indent-offset 4
