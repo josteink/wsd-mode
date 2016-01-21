@@ -216,7 +216,9 @@
   (let* (;; some keywords should only trigger when starting a line.
          (line-starters '("title" "participant" "deactivate" "activate"
                           "alt" "else" "opt" "loop" "state" "note"
-                          "end" "end state" "end note" "end ref"
+                          "end state" "end note" "end ref"
+                          ;; match plain end only after all other ends.
+                          "end"
                           "autonumber" "destroy" "option footer"
                           "parallel" "ref"))
          ;; combine into one big OR regexp, ^<> start of line, whole word only.
