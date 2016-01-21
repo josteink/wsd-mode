@@ -239,6 +239,14 @@
                                       (cons rx-comments 'font-lock-comment-face)
                                       (cons rx-operators 'font-lock-comment-face))))
 
+  ;; create syntax-table.
+  ;; this is required for things like company-mode to complete at correct point
+  (let ((table (make-syntax-table)))
+    ;; "." represents punctuation
+    (dolist (item '(?> ?< ?: ?- ?+ ?*))
+      (modify-syntax-entry item "-" table))
+    (set-syntax-table table))
+
   (make-local-variable 'wsd-indent-offset)
   (set (make-local-variable 'indent-line-function) 'wsd-indent-line)
 

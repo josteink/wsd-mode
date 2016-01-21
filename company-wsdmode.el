@@ -17,20 +17,34 @@
     "alt" "opt" "end" "loop" "else" "destroy"
     "note" "state" "ref"))
 
+(defun wsd-get-participants ()
+  "Returns a list of participants found in the document."
+  (save-excursion
+    (beginning-of-buffer)
+    (let (res)
+      (while (re-search-forward "^[[:blank:]]*participant[[:blank:]]+\\(.+\\)[[:blank:]]+as[[:blank:]]+\\(.+\\)$" nil t nil)
+        (add-to-list 'res (match-string-no-properties 1))
+        (add-to-list 'res (match-string-no-properties 2)))
+      res)))
+
 (defun wsd-get-completion-keywords ()
   "Return things which are valid completions for the current buffer."
-  
-  ;; TODO: enumerate participant-statements (for shorthand)
+
+  ;; TODO: determine if looking at statement where participant is expected
+  ;; in those cases, do NOT return keyword matches!
+  (append
+   wsd-keyword-completions
+   (wsd-get-participants))
   ;; TODO: enumerate -> statements
   ;; TODO: enumerate active/deactivate statements? or redundant?
-  wsd-keyword-completions)
+  )
 
 (defun company-wsd-mode (command &optional arg &rest ignored)
   "Company back-end function for `wsd-mode'.
 
 See https://github.com/company-mode/company-mode/wiki/Writing-backends for
 documentation on parameters."
-  
+
   (interactive (list 'interactive))
 
   (cl-case command
