@@ -30,8 +30,9 @@ The major-mode provides the following features:
 - inline rendering in Emacs frames when possible, with fallback to OS or
   browser for viewing when critical features are unavailable.
 - ~org-babel~ support (use ~wsd~ as language).
+- ~company-mode~ support.
 - limited ~flycheck~ support.
-- limited ~company-mode~ support.
+
 
 ** Installation
 
