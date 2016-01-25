@@ -54,8 +54,10 @@ Delimiters included.  If no api-key is used, returns nil."
   (let* ((encode1 (replace-regexp-in-string (regexp-quote "+")
                                             (regexp-quote "%2B")
                                             message))
-         (encode2 (url-encode-url encode1)))
-    encode2))
+         ;; otherwise comments in script will break export!
+         (encode2 (replace-regexp-in-string "#" "%23" encode1))
+         (encode3 (url-encode-url encode2)))
+    encode3))
 
 (defun wsd-get-request-data (message)
   "Transform `MESSAGE' into request-data for a HTTP post to the wsd.com API."
@@ -222,9 +224,7 @@ to the operating-system to open the local copy."
   (interactive)
   (let* ((message      (buffer-substring-no-properties (point-min) (point-max)))
          (encoded      (wsd-encode message))
-         ;; otherwise comments in script will break export!
-         (escaped      (replace-regexp-in-string "#" "%23" encoded))
-         (url          (concat wsd-base-url "?m=" escaped)))
+         (url          (concat wsd-base-url "?m=" encoded)))
     (browse-url url)))
 
 (provide 'wsd-core)
