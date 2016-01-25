@@ -101,8 +101,10 @@
 
     (dolist (item '("title" "participant" "deactivate" "activate"
                     "alt" "else" "opt" "loop" "end" "note"
+                    "end state" "end note" "end ref"
                     "state" "ref" "parallel"))
-      ;; (message (concat "Testing '" item "'."))
+                    ;; (message (concat "Testing '" item "'."))
+                    (message (concat "Testing fontification of " item))
       (let* ((buffer1)
              (buffer2))
         (goto-char (point-min))

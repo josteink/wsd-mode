@@ -19,17 +19,19 @@ else else
     state state
     end end
 
-    ref ref
-    end ref
-    
     loop loop
     end end
 
     parallel parallel
-    
+
+    ref ref
+    end end
+
 end end
 
 opt opt
-end end
-    
-ref ref 
+end end    
+
+end note end note
+end ref end ref
+end state end state
