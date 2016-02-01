@@ -9,7 +9,9 @@
 ;;
 ;;; Code:
 (require 'cl-lib)
-(require 'company)
+(ignore-errors
+  ;; required to allow byte-compilation
+  (require 'company))
 
 (defconst wsd-keyword-completions
   '("title" "participant" "as" "over" "right" "left" "of"
@@ -20,7 +22,7 @@
 (defun wsd-get-participants ()
   "Returns a list of participants found in the document."
   (save-excursion
-    (beginning-of-buffer)
+    (goto-char (point-min))
     (let (res)
       (while (re-search-forward "^[[:blank:]]*participant[[:blank:]]+\\(.+\\)[[:blank:]]+as[[:blank:]]+\\(.+\\)$" nil t nil)
         (add-to-list 'res (match-string-no-properties 1))
@@ -30,14 +32,14 @@
 (defun wsd-get-actors ()
   "Returns a list of actors found in the document."
   (save-excursion
-    (beginning-of-buffer)
-    (let ((operators '("-->-" "-->" "->+" "->*" "->-" "->"))
-          (rx-operators (regexp-opt operators t))
-          (rx-actors (wsd-rx-lstart (concat "\\([^\n-]+\\)"
-                                            rx-operators
-                                            "\\(.+\\)"
-                                            ":.*$")))
-          res)
+    (goto-char (point-min))
+    (let* ((operators '("-->-" "-->" "->+" "->*" "->-" "->"))
+           (rx-operators (regexp-opt operators t))
+           (rx-actors (wsd-rx-lstart (concat "\\([^\n-]+\\)"
+                                             rx-operators
+                                             "\\(.+\\)"
+                                             ":.*$")))
+           res)
       (while (re-search-forward rx-actors nil t nil)
         (add-to-list 'res (match-string-no-properties 1))
         (add-to-list 'res (match-string-no-properties 3)))
@@ -72,7 +74,9 @@ documentation on parameters."
       (lambda (c) (string-prefix-p arg c))
       (wsd-get-completion-keywords)))))
 
-(add-to-list 'company-backends 'company-wsd-mode)
+
+(when (boundp 'company-backends)
+  (add-to-list 'company-backends 'company-wsd-mode))
 
 (provide 'company-wsdmode)
 ;;; company-wsdmode.el ends here
