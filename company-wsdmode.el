@@ -28,7 +28,7 @@
       res)))
 
 (defun wsd-get-actors ()
-  "Returns a list of participants found in the document."
+  "Returns a list of actors found in the document."
   (save-excursion
     (beginning-of-buffer)
     (let ((operators '("-->-" "-->" "->+" "->*" "->-" "->"))
@@ -52,7 +52,6 @@
    wsd-keyword-completions
    (wsd-get-participants)
    (wsd-get-actors))
-  ;; TODO: enumerate -> statements
   ;; TODO: enumerate active/deactivate statements? or redundant?
   )
 
