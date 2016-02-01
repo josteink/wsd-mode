@@ -27,6 +27,22 @@
         (add-to-list 'res (match-string-no-properties 2)))
       res)))
 
+(defun wsd-get-actors ()
+  "Returns a list of participants found in the document."
+  (save-excursion
+    (beginning-of-buffer)
+    (let ((operators '("-->-" "-->" "->+" "->*" "->-" "->"))
+          (rx-operators (regexp-opt operators t))
+          (rx-actors (wsd-rx-lstart (concat "\\([^\n-]+\\)"
+                                            rx-operators
+                                            "\\(.+\\)"
+                                            ":.*$")))
+          res)
+      (while (re-search-forward rx-actors nil t nil)
+        (add-to-list 'res (match-string-no-properties 1))
+        (add-to-list 'res (match-string-no-properties 3)))
+      res)))
+
 (defun wsd-get-completion-keywords ()
   "Return things which are valid completions for the current buffer."
 
@@ -34,7 +50,8 @@
   ;; in those cases, do NOT return keyword matches!
   (append
    wsd-keyword-completions
-   (wsd-get-participants))
+   (wsd-get-participants)
+   (wsd-get-actors))
   ;; TODO: enumerate -> statements
   ;; TODO: enumerate active/deactivate statements? or redundant?
   )
