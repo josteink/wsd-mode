@@ -66,6 +66,7 @@
 ;;    0.4.3 - Improved syntax-support for pro-only features
 ;;            (almost feature complete).
 ;;          - Basic company-mode completion.
+;;          - Configurable fontification-levels.
 
 
 ;;; Code:
