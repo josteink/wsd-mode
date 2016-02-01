@@ -65,7 +65,21 @@ Once the mode is active, type along as you would otherwise do on
 
 *** Customization
 
-Customization is available in the normal Emacs customize framework.
+~wsd-mode~ supports three different fontification levels:
+
+- ~wsd-font-lock-keywords-1~: keywords only 
+- ~wsd-font-lock-keywords-2~: the above + operators
+- ~wsd-font-lock-keywords-3~: the above + actors/variables
+
+The default is ~wsd-font-lock-keywords-3~. Override by adding the
+following to your ~init.el~:
+
+#+BEGIN_SRC emacs-lisp
+  (setq wsd-font-lock-keywords wsd-font-lock-keywords-2)
+#+END_SRC
+
+Besides these options, customization is available in the normal Emacs
+customize framework.
 
 ~M-x customize-group <RET> wsd-mode~
 
