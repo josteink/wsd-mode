@@ -229,15 +229,11 @@
          (keywords '("over" "right of" "left of" "as"))
          (rx-keywords (wsd-rx-word (wsd-rx-or keywords)))
 
-         ;; lines starting with # are treated as comments
-         (rx-comments "#.*$")
-
          ;; operators
          (operators '("-->-" "-->" "->+" "->*" "->-" "->" ": "))
          (rx-operators (regexp-opt operators t)))
     (font-lock-add-keywords nil (list (cons rx-keywords 'font-lock-keyword-face)
                                       (cons rx-line-starters 'font-lock-keyword-face)
-                                      (cons rx-comments 'font-lock-comment-face)
                                       (cons rx-operators 'font-lock-comment-face))))
 
   ;; create syntax-table.
@@ -246,6 +242,8 @@
     ;; "." represents punctuation
     (dolist (item '(?> ?< ?: ?- ?+ ?*))
       (modify-syntax-entry item "-" table))
+    (modify-syntax-entry ?# "<" table) ;; make # comment starter
+    (modify-syntax-entry ?\n ">" table) ;; and newline comment ender
     (set-syntax-table table))
 
   (make-local-variable 'wsd-indent-offset)
