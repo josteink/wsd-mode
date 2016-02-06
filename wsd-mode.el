@@ -276,7 +276,7 @@
                  ;; some keywords are OK almost anywhere, or at least treat them as such.
                  (keywords '("over" "right of" "left of" "as"))
                  (rx-keywords (wsd-rx-word (wsd-rx-or keywords)))
-                 (rx-actors-positional (concat rx-keywords "\\([^:]+\\)$")))
+                 (rx-actors-positional (concat rx-keywords "\\([^\n:]+\\)$")))
             (list
              (list rx-participants 1 'font-lock-variable-name-face)
              (list rx-participants 2 'font-lock-variable-name-face)
