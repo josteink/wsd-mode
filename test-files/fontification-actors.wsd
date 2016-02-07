@@ -1,0 +1,17 @@
+
+title Fontification actor
+
+participant Major Obstable Officer as moo
+
+ref over moo
+    should not be variable face
+end ref
+
+note right of moo
+    should not be variable face
+end note
+
+state left of moo
+    should not be variable face
+end note
+

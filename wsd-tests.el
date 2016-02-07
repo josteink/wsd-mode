@@ -9,7 +9,7 @@
 (require 'wsd-core)
 (require 'wsd-mode)
 (require 'ob-wsdmode)
-(require 'wsd-flycheck)
+(require 'wsd-flycheck)
 
 
 ;; test-helpers
@@ -103,7 +103,7 @@
                     "alt" "else" "opt" "loop" "end" "note"
                     "end state" "end note" "end ref"
                     "state" "ref" "parallel"))
-                    (message (concat "Testing fontification of '" item "'."))
+      (message (concat "Testing fontification of '" item "'."))
       (let* ((buffer1)
              (buffer2))
         (goto-char (point-min))
@@ -131,6 +131,34 @@
                       (face-at-point))))))
 
     (kill-buffer buffer)))
+
+(ert-deftest positional-actors-are-fontified-as-variables ()
+  (let* ((buffer (find-file-read-only "test-files/fontification-actors.wsd")))
+    ;; double-ensure mode is active
+    (wsd-mode)
+    ;; required when running in unit-test runner.
+    (font-lock-fontify-buffer)
+
+    (dolist (item '("ref over" "note right of" "state left of"))
+      (let* ((buffer1)
+             (buffer2))
+        (goto-char (point-min))
+
+        ;; get reference string
+        (search-forward item)
+        (backward-char) ;; we're AFTER the fontified area
+        (should (eql
+                 'font-lock-keyword-face
+                 (face-at-point)))
+
+        ;; get verification string
+        (search-forward "moo")
+        (backward-char) ;; we're AFTER the fontified area
+
+        ;; verify different fontification
+        (should (eql
+                 'font-lock-variable-name-face
+                 (face-at-point)))))))
 
 (ert-deftest indentation-reference-document-is-reflowed-correctly ()
   (let* ((buffer (find-file "test-files/indentation-tests.wsd")))
