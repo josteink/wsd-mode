@@ -2,8 +2,8 @@
 
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
 ;; Created    : December 2014
-;; Modified   : September 2015
-;; Version    : 0.4.3
+;; Modified   : Februar 2016
+;; Version    : 0.5.0
 ;; Keywords   : wsd diagrams design process modelling uml
 ;; X-URL      : https://github.com/josteink/wsd-mode
 ;;
@@ -63,7 +63,7 @@
 ;;          - Improved fontication for additional keywords (autonumber, destroy,
 ;;            option footer) and syntax (*-activation).
 ;;          - Support for some pro-only features.
-;;    0.4.3 - Improved syntax-support for pro-only features
+;;    0.5.0 - Improved syntax-support for pro-only features
 ;;            (almost feature complete).
 ;;          - Basic company-mode completion.
 ;;          - Configurable fontification-levels.
