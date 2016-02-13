@@ -2,7 +2,7 @@
 
 ;; Author     : Jostein Kjønigsen <jostein@gmail.com>
 ;; Created    : December 2014
-;; Modified   : Februar 2016
+;; Modified   : February 2016
 ;; Version    : 0.5.0
 ;; Keywords   : wsd diagrams design process modelling uml
 ;; X-URL      : https://github.com/josteink/wsd-mode

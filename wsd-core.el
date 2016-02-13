@@ -205,7 +205,7 @@ to the operating-system to open the local copy."
       (message url))))
 
 (defun wsd-browse-url (url)
-  "Open `URL' in a browser which can support image-formats not understood by emacs."
+  "Open `URL' in a browser which can support image-formats not understood by Emacs."
 
   ;; Some people have eww bound as the default-browser.
   ;;
@@ -219,12 +219,19 @@ to the operating-system to open the local copy."
       (eww-browse-with-external-browser url)
     (browse-url url)))
 
+(defun wsd-get-diagram-online-url (message)
+  "Return the url to show `MESSAGE' online."
+  (let*
+      ((encoded      (url-build-query-string
+                      `((m ,message))))
+       (url          (concat wsd-base-url "?" encoded)))
+    url))
+
 (defun wsd-show-diagram-online ()
   "Show the current buffer on www.websequencediagrams.com."
   (interactive)
   (let* ((message      (buffer-substring-no-properties (point-min) (point-max)))
-         (encoded      (wsd-encode message))
-         (url          (concat wsd-base-url "?m=" encoded)))
+         (url          (wsd-get-diagram-online-url message)))
     (browse-url url)))
 
 (provide 'wsd-core)

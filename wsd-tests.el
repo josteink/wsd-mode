@@ -173,6 +173,17 @@
 
     (kill-buffer buffer)))
 
+(ert-deftest document-contents-are-encoded-when-shown-online ()
+  (let* ((test-chars "\"#¤&/()+&<>")
+         (url-base   (wsd-get-diagram-online-url ""))
+         (url        (wsd-get-diagram-online-url test-chars))
+         (url-query  (substring url (length url-base))))
+    (dolist (char (string-to-list test-chars))
+      ;; (message (concat "Testing " (string char)))
+      (should (not (string-match-p
+                    (regexp-quote (string char))
+                    url-query))))))
+
 ;; (ert-deftest flycheck-errors-are-returned ()
 ;;   (let* ((result (wsd-flycheck-parse-errors
 ;;                   'wsd-mode-checker
