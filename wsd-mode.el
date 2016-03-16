@@ -260,10 +260,10 @@
                                                          (wsd-rx-word "as")
                                                          "\\(.+\\)$")))
 
-                 ;; actors in activity staements
+                 ;; actors in activity statements
                  (rx-actors (wsd-rx-lstart (concat "\\([^\n-]+\\)"
                                                    (regexp-opt wsd-operators3 t)
-                                                   "\\(.+\\)"
+                                                   "\\([^:]+\\)"
                                                    ":.*$")))
 
                  ;; actors in activate/deactivate/destroy statements

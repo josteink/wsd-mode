@@ -160,6 +160,19 @@
                  'font-lock-variable-name-face
                  (face-at-point)))))))
 
+(ert-deftest statement-actors-are-fontified-as-variables ()
+  (let* ((buffer (find-file-read-only "test-files/fontification-double-colon.wsd")))
+    ;; double-ensure mode is active
+    (wsd-mode)
+    ;; required when running in unit-test runner.
+    (font-lock-fontify-buffer)
+
+    (while (search-forward "pc" nil t)
+      (backward-char 1)
+      (should (eql
+               'font-lock-variable-name-face
+               (face-at-point))))))
+
 (ert-deftest indentation-reference-document-is-reflowed-correctly ()
   (let* ((buffer (find-file "test-files/indentation-tests.wsd")))
     ;; double ensure mode is active

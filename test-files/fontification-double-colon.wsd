@@ -1,0 +1,7 @@
+
+title Double colon fontification error (as outligned in github issue 37)
+
+pc->pc: This line highlight's actor just fine
+pc->pc: This line doesn't, because of a double : sign.
+pc->pc: But next line is just fine again.
+
