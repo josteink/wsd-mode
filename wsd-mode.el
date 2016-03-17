@@ -28,14 +28,11 @@
 ;; - generating and saving diagrams generated through WSD's online API.
 ;; - support for WSD premium features (svg-export, etc) if API-key is
 ;;   provided.
-;; - rendering diagrams inline in emacs, or in external OS viewer if image
+;; - rendering diagrams inline in Emacs, or in external OS viewer if image
 ;;   format is not supported by Emacs.
 ;;
 ;;
 ;; Customization:
-;;
-;; The mode can be slightly customized. Documenting this fully is on the
-;; TODO-list.
 ;;
 ;; To create mode-specific emacs-customizations, please use the
 ;; wsd-mode-hook.
@@ -46,6 +43,7 @@
 ;; - wsd-format (default png. svg requires premium, thus api-key.)
 ;; - wsd-style (default modern-blue)
 ;; - wsd-indent-offset (default 4)
+;; - wsd-font-lock-keywords
 ;;
 
 ;;; Versions:
@@ -287,14 +285,30 @@
 
 
 ;; apply default fontification-setting
-(defvar wsd-font-lock-keywords wsd-font-lock-keywords-3)
+(defcustom wsd-font-lock-keywords "3 - Keywords, operators and variables"
+  "Fontification level for `wsd-mode'."
+  :type '(choice (const "1 - Keywords") (const "2 - Keywords and operators") (const "3 - Keywords, operators and variables"))
+  :group 'wsd-mode)
+
+(defun wsd-get-font-lock-level ()
+  "Gets the currently set font-lock level."
+
+  (condition-case err
+      (let* ((level-string (substring wsd-font-lock-keywords 0 1))
+             (level-num    (string-to-number level-string)))
+        (cond ((= 1 level-num) wsd-font-lock-keywords-1)
+              ((= 2 level-num) wsd-font-lock-keywords-2)
+              (t               wsd-font-lock-keywords-3)))
+    (error
+     wsd-font-lock-keywords-3)))
+
 
 ;;;###autoload
 (define-derived-mode wsd-mode fundamental-mode "wsd-mode"
   "Major-mode for websequencediagrams.com"
 
   ;; set fontification rules according to user-preferences
-  (set (make-local-variable 'font-lock-defaults) (list wsd-font-lock-keywords))
+  (set (make-local-variable 'font-lock-defaults) (list (wsd-get-font-lock-level)))
 
   ;; create syntax-table.
   ;; this is required for things like company-mode to complete at correct point
