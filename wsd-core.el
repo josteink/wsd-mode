@@ -51,13 +51,7 @@ Delimiters included.  If no api-key is used, returns nil."
 
 (defun wsd-encode (message)
   "Encodes the provided `MESSAGE' into something which can be transported over HTTP."
-  (let* ((encode1 (replace-regexp-in-string (regexp-quote "+")
-                                            (regexp-quote "%2B")
-                                            message))
-         ;; otherwise comments in script will break export!
-         (encode2 (replace-regexp-in-string "#" "%23" encode1))
-         (encode3 (url-encode-url encode2)))
-    encode3))
+  (url-hexify-string message))
 
 (defun wsd-get-request-data (message)
   "Transform `MESSAGE' into request-data for a HTTP post to the wsd.com API."

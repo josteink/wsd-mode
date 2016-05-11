@@ -197,6 +197,13 @@
                     (regexp-quote (string char))
                     url-query))))))
 
+(ert-deftest message-is-correctly-urlencoded ()
+  (let* ((test-chars "% &;/?:@=<>#{}|\^[]`")
+		 (encoded (wsd-encode test-chars)))
+	(should (string=
+			 encoded
+			 "%25%20%26%3B%2F%3F%3A%40%3D%3C%3E%23%7B%7D%7C%1B%5D%60"))))
+
 ;; (ert-deftest flycheck-errors-are-returned ()
 ;;   (let* ((result (wsd-flycheck-parse-errors
 ;;                   'wsd-mode-checker
