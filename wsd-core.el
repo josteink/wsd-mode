@@ -140,7 +140,9 @@ Checks weather `BUFFER-NAME' already exists, and if not create as needed."
     ;; unless we clear the cache, the same cached image will
     ;; always get redisplayed.
     (clear-image-cache nil)
+    (insert "\n")
     (insert-image (create-image file-name))
+    (beginning-of-buffer)
     (read-only-mode t)))
 
 (defun wsd-image-format-supported-p ()
