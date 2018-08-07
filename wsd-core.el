@@ -28,7 +28,7 @@ account."
   :type '(choice (const "plain-uml") (const "rose") (const "qsd") (const "napkin") (const "vs2010") (const "mscgen") (const "patent") (const "omegapple") (const "modern-blue") (const "earth") (const "roundgreen") (const "magazine"))
   :group 'wsd-mode)
 
-(defcustom wsd-base-url "http://www.websequencediagrams.com/"
+(defcustom wsd-base-url "https://www.websequencediagrams.com/"
   "Default base URL."
   :type 'string
   :group 'wsd-mode)
