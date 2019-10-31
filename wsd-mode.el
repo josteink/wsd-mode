@@ -280,6 +280,9 @@
                                                          (wsd-rx-word "as")
                                                          "\\(.+\\)$")))
 
+                 (rx-participants-no-as (wsd-rx-lstart (concat (wsd-rx-word "participant")
+                                                         "\\(.+\\)$")))
+
                  ;; actors in activity statements
                  (rx-actors (wsd-rx-lstart (concat "\\([^\n-]+\\)"
                                                    (regexp-opt wsd-operators3 t)
@@ -300,6 +303,7 @@
             (list
              (list rx-participants 1 'font-lock-variable-name-face)
              (list rx-participants 2 'font-lock-variable-name-face)
+             (list rx-participants-no-as 1 'font-lock-variable-name-face)
              (list rx-actors 1 'font-lock-variable-name-face)
              (list rx-actors 3 'font-lock-variable-name-face)
              (list rx-actors-keywords 2 'font-lock-variable-name-face)
