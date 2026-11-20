@@ -28,14 +28,12 @@ jobs:
           experimental: true
           
     steps:
-    - uses: actions/checkout@v2
-      with:
-        node-version: '12'
-    - uses: actions/setup-python@v2
-    - uses: purcell/setup-emacs@master
-      with:
-        version: ${{ matrix.emacs_version }}
-    - uses: conao3/setup-cask@master
+      - uses: actions/checkout@v2
+      - uses: jcs090218/setup-emacs@master
+        with:
+          version: ${{ matrix.emacs-version }}
+          
+      - uses: conao3/setup-cask@master
 
-    - name: Run build
-      run: make all
+      - name: Run build
+        run: make all
